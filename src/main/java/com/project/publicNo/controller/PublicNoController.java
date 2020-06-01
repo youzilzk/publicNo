@@ -1,14 +1,18 @@
 package com.project.publicNo.controller;
 
 import com.project.publicNo.pojo.ResponseBody;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import com.project.publicNo.service.PublicNoService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
+
 public class PublicNoController {
-
-    public ResponseBody initIndex(@RequestBody Integer userId){
-
-        return null;
+    @Autowired
+    private PublicNoService publicNoService;
+    @RequestMapping("/initPage")
+    @CrossOrigin
+    public ResponseBody initPage(@RequestParam(value = "userId") Integer userId){
+        return publicNoService.initService(userId);
     }
 }
