@@ -3,6 +3,7 @@ package com.project.publicNo.dao;
 import com.project.publicNo.pojo.RankData;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Mapper
@@ -11,5 +12,5 @@ public interface InitDao {
     public int selectArticleCount(int userId);
     public int selectWaitReadCount(int userId);
     public RankData selectRankDataByUserId(int userId);
-    public List<Integer> selectAllRankUser(int userId);
+    public ArrayList<Integer> selectAllRankUser();
 }

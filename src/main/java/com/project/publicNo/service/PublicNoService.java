@@ -26,10 +26,11 @@ public class PublicNoService {
         responseBody.setArticleCount(articleCount);
         int waitReadCount = initDao.selectWaitReadCount(userId);
         responseBody.setWaitReadCount(waitReadCount);
-        List<User> users = userDao.selectAll();
+        //List<User> users = userDao.selectAll();
+        ArrayList<Integer> userIdList = initDao.selectAllRankUser();
         ArrayList<RankData> rankList=new ArrayList<>();
-        for (User user : users) {
-            RankData rankData = initDao.selectRankDataByUserId(user.getUserId());
+        for (int i = 0; i < userIdList.size(); i++) {
+            RankData rankData = initDao.selectRankDataByUserId(userIdList.get(i));
             if(rankData==null){
                 continue;
             }
