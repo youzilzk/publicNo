@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 @Data
 @ToString
-public class ResponseBody {
+public class InitResponse {
    private boolean result;
    private Integer readPeas;
    private Integer articleCount;

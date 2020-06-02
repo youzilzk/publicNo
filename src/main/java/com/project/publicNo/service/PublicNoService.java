@@ -3,13 +3,13 @@ package com.project.publicNo.service;
 import com.project.publicNo.dao.InitDao;
 import com.project.publicNo.dao.UserDao;
 import com.project.publicNo.entity.User;
+import com.project.publicNo.pojo.LoginResponse;
 import com.project.publicNo.pojo.RankData;
-import com.project.publicNo.pojo.ResponseBody;
+import com.project.publicNo.pojo.InitResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Service
 public class PublicNoService {
@@ -18,17 +18,35 @@ public class PublicNoService {
     private InitDao initDao;
     @Autowired
     private UserDao userDao;
-    public ResponseBody initService(int userId){
-        ResponseBody responseBody = new ResponseBody();
+
+    //获取登录的用户信息
+    public LoginResponse loginService(int userId){
+        User user=new User();
+        user.setUserId(userId);
+        User selectOne = userDao.selectOne(user);
+        //把密码置空,防止网络中传输
+        selectOne.setPassword("");
+        LoginResponse loginResponse = new LoginResponse();
+        loginResponse.setResult(true);
+        loginResponse.setUser(selectOne);
+        return loginResponse;
+    }
+    //初始化首页
+    public InitResponse initService(int userId){
+        InitResponse initResponse = new InitResponse();
+        //根据用户id查询阅豆
         int readPeas = initDao.selectReadPeas(userId);
-        responseBody.setReadPeas(readPeas);
+        initResponse.setReadPeas(readPeas);
+        //查询该用户发布的文章数
         int articleCount = initDao.selectArticleCount(userId);
-        responseBody.setArticleCount(articleCount);
+        initResponse.setArticleCount(articleCount);
+        //查询待阅数
         int waitReadCount = initDao.selectWaitReadCount(userId);
-        responseBody.setWaitReadCount(waitReadCount);
-        //List<User> users = userDao.selectAll();
+        initResponse.setWaitReadCount(waitReadCount);
+        //查询所有用户,并根据阅豆从大到小对用户排序
         ArrayList<Integer> userIdList = initDao.selectAllRankUser();
         ArrayList<RankData> rankList=new ArrayList<>();
+        //查询阅读排行
         for (int i = 0; i < userIdList.size(); i++) {
             RankData rankData = initDao.selectRankDataByUserId(userIdList.get(i));
             if(rankData==null){
@@ -36,8 +54,8 @@ public class PublicNoService {
             }
             rankList.add(rankData);
         }
-        responseBody.setRankList(rankList);
-        responseBody.setResult(true);
-        return responseBody;
+        initResponse.setRankList(rankList);
+        initResponse.setResult(true);
+        return initResponse;
     }
 }
