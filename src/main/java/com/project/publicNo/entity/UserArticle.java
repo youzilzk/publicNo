@@ -1,7 +1,6 @@
 package com.project.publicNo.entity;
 
-import lombok.Data;
-import lombok.ToString;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
@@ -9,6 +8,8 @@ import javax.persistence.Table;
 
 @Data
 @ToString
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "t_user_article")
 public class UserArticle {
     @Id

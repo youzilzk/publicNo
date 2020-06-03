@@ -3,17 +3,19 @@ package com.project.publicNo.service;
 
 import com.project.publicNo.dao.ArticleDao;
 import com.project.publicNo.dao.InitDao;
+import com.project.publicNo.dao.UserArticleDao;
 import com.project.publicNo.dao.UserDao;
 import com.project.publicNo.entity.Article;
 import com.project.publicNo.entity.User;
-import com.project.publicNo.pojo.ArticleResponse;
-import com.project.publicNo.pojo.LoginResponse;
-import com.project.publicNo.pojo.RankData;
-import com.project.publicNo.pojo.InitResponse;
+import com.project.publicNo.entity.UserArticle;
+import com.project.publicNo.pojo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 @Service
 public class PublicNoService {
@@ -24,6 +26,8 @@ public class PublicNoService {
     private UserDao userDao;
     @Autowired
     private ArticleDao articleDao;
+    @Autowired
+    private UserArticleDao userArticleDao;
 
     //获取登录的用户信息
     public LoginResponse loginService(int userId){
@@ -72,5 +76,27 @@ public class PublicNoService {
         response.setArticles(articles);
         response.setResult(true);
         return response;
+    }
+
+    //添加文章信息
+    @Transactional(rollbackFor = Exception.class)
+    public void addArticle(Map<String,String> map){
+        Article article = new Article();
+        int userId = Integer.parseInt((String) map.get("userId"));
+        article.setTitle((String) map.get("title"));
+        article.setArticleLink((String) map.get("articleLink"));
+        //插入文章表
+        articleDao.insertArticle(article);
+        //添加用户和文章映射
+        UserArticle userArticle = new UserArticle(userId,article.getArticleId());
+        userArticleDao.insert(userArticle);
+        //判断是否开启置顶
+        if(map.get("isTop").toString().equals("1")){
+            int readPeas = Integer.parseInt(map.get("readPeas"));
+            User user = new User();
+            user.setUserId(userId);
+            user.setReadPeas(readPeas);
+            userDao.updateReadPeas(user);
+        }
     }
 }
