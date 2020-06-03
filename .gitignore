@@ -1,8 +1,8 @@
 test/
 target/
-.idea/
-vcs.xml
-workspace.xml
-misc.xml
-encodings.xml
-compiler.xml
+.idea
+/vcs.xml
+/workspace.xml
+/misc.xml
+/encodings.xml
+/compiler.xml
