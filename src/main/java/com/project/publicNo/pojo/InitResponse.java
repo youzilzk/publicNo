@@ -7,8 +7,7 @@ import java.util.ArrayList;
 
 @Data
 @ToString
-public class InitResponse {
-   private boolean result;
+public class InitResponse extends Response{
    private Integer readPeas;
    private Integer articleCount;
    private Integer waitReadCount;

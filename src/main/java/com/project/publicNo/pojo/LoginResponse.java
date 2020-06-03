@@ -6,7 +6,6 @@ import lombok.ToString;
 
 @Data
 @ToString
-public class LoginResponse {
-    private boolean result;
+public class LoginResponse extends Response{
     private User user;
 }

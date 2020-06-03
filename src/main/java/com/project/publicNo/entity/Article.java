@@ -20,4 +20,6 @@ public class Article {
     private String articleLink;
     @Column(name = "create_time")
     private String createTime;
+//    @Column(name = "delate_flg")
+//    private String delateFlg;
 }

@@ -1,8 +1,12 @@
 package com.project.publicNo.service;
 
+
+import com.project.publicNo.dao.ArticleDao;
 import com.project.publicNo.dao.InitDao;
 import com.project.publicNo.dao.UserDao;
+import com.project.publicNo.entity.Article;
 import com.project.publicNo.entity.User;
+import com.project.publicNo.pojo.ArticleResponse;
 import com.project.publicNo.pojo.LoginResponse;
 import com.project.publicNo.pojo.RankData;
 import com.project.publicNo.pojo.InitResponse;
@@ -18,6 +22,8 @@ public class PublicNoService {
     private InitDao initDao;
     @Autowired
     private UserDao userDao;
+    @Autowired
+    private ArticleDao articleDao;
 
     //获取登录的用户信息
     public LoginResponse loginService(int userId){
@@ -57,5 +63,14 @@ public class PublicNoService {
         initResponse.setRankList(rankList);
         initResponse.setResult(true);
         return initResponse;
+    }
+
+    //获取用户所有文章
+    public ArticleResponse getArticles(int userId){
+        ArrayList<Article> articles = articleDao.selectArticlesByUserId(userId);
+        ArticleResponse response = new ArticleResponse();
+        response.setArticles(articles);
+        response.setResult(true);
+        return response;
     }
 }

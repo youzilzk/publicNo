@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.publicNo.dao.ArticleDao">
+
+    <!--查询1用户发布的所有文章-->
+    <resultMap id="articles" type="com.project.publicNo.entity.Article">
+        <id property="articleId" column="article_id"/>
+        <result property="title" column="title"/>
+        <result property="articleLink" column="article_link"/>
+        <result property="createTime" column="create_time"/>
+       <!-- <result property="delateFlg" column="delate_flg"/>-->
+    </resultMap>
+    <select id="selectArticlesByUserId" parameterType="Integer" resultMap="articles">
+      select * from t_article where article_id in (SELECT article_id FROM t_user_article WHERE user_id=#{userId}) and delate_flg=0 order by create_time desc
+    </select>
+
+</mapper>

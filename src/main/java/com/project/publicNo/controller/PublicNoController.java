@@ -1,5 +1,6 @@
 package com.project.publicNo.controller;
 
+import com.project.publicNo.pojo.ArticleResponse;
 import com.project.publicNo.pojo.InitResponse;
 import com.project.publicNo.pojo.LoginResponse;
 import com.project.publicNo.service.PublicNoService;
@@ -21,5 +22,10 @@ public class PublicNoController {
     @RequestMapping(value = "/initPage")
     public InitResponse initPage(@RequestParam(value = "userId") Integer userId){
         return publicNoService.initService(userId);
+    }
+
+    @RequestMapping("/articles")
+    public ArticleResponse getArticles(@RequestParam(value = "userId") Integer userId){
+        return publicNoService.getArticles(userId);
     }
 }
