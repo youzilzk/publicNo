@@ -11,4 +11,5 @@ import lombok.ToString;
 @AllArgsConstructor
 public class Response {
      public boolean result;
+     public String reaponseMessage;
 }

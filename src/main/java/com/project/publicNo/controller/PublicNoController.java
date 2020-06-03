@@ -1,9 +1,6 @@
 package com.project.publicNo.controller;
 
-import com.project.publicNo.pojo.ArticleResponse;
-import com.project.publicNo.pojo.InitResponse;
-import com.project.publicNo.pojo.LoginResponse;
-import com.project.publicNo.pojo.Response;
+import com.project.publicNo.pojo.*;
 import com.project.publicNo.service.PublicNoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -36,9 +33,14 @@ public class PublicNoController {
     public Response addArticle(@RequestBody Map<String,String> map){
        try {
            publicNoService.addArticle(map);
-           return new Response(true);
+           return new Response(true,"发布文章成功!");
        }catch (Exception e){
-           return new Response(false);
+           return new Response(false,"发布文章失败!");
        }
+    }
+
+    @RequestMapping("/readMeInfo")
+    public ReadMeResponse getReadMeInfo(@RequestParam(value = "userId") Integer userId){
+        return publicNoService.getReadMeInfo(userId);
     }
 }

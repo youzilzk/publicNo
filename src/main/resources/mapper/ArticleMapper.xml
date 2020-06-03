@@ -19,6 +19,6 @@
         <selectKey resultType="Integer" keyProperty="articleId" order="AFTER">
             select LAST_INSERT_ID()
         </selectKey>
-        insert into t_article(title,article_link) values (#{title},#{articleLink})
+        insert into t_article(title,article_link,isTop) values (#{title},#{articleLink},#{isTop})
     </insert>
 </mapper>

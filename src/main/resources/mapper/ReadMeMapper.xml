@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.project.publicNo.dao.ReadMeDao">
+
+    <!--查询1用户发布的所有文章-->
+    <select id="getReadMeInfo" parameterType="Integer" resultType="User">
+        SELECT user_id,nickname,pic_url,read_peas,phone,register_time FROM t_user WHERE user_id IN (SELECT reader_id FROM t_readme WHERE author_id=#{userId})
+    </select>
+</mapper>

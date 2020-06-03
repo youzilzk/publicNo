@@ -6,6 +6,8 @@ import java.util.ArrayList;
 
 @org.apache.ibatis.annotations.Mapper
 public interface ArticleDao{
+    //查询用户的文章
     public ArrayList<Article> selectArticlesByUserId(int userId);
+    //添加文章
     public int insertArticle(Article article);
 }

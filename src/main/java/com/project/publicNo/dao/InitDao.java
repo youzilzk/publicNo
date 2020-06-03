@@ -11,6 +11,6 @@ public interface InitDao {
     public int selectReadPeas(int userId);
     public int selectArticleCount(int userId);
     public int selectWaitReadCount(int userId);
-    public RankData selectRankDataByUserId(int userId);
+    public ArrayList<RankData> selectRankData();
     public ArrayList<Integer> selectAllRankUser();
 }

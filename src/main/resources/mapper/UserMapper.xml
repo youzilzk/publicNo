@@ -4,6 +4,6 @@
 
     <!--更新阅豆-->
     <update id="updateReadPeas" parameterType="User">
-        UPDATE t_user SET read_peas=read_peas+#{readPeas} WHERE user_id=#{userId}
+        UPDATE t_user SET read_peas=read_peas-#{readPeas} WHERE user_id=#{userId}
     </update>
 </mapper>

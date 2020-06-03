@@ -22,7 +22,7 @@
         SELECT count(*) FROM t_readme WHERE author_id=#{userId}
     </select>
 
-    <!--查询所有用户排行-->
+    <!--查询所有排行文章-->
     <resultMap id="rankData" type="com.project.publicNo.pojo.RankData">
         <id property="publisher" column="nickname"/>
         <result column="pic_url" property="userPic"/>
@@ -30,12 +30,12 @@
         <result column="read_peas" property="exposure"/>
         <result column="article_link" property="articleUrl"/>
     </resultMap>
-    <select id="selectRankDataByUserId" parameterType="Integer" resultMap="rankData">
-       SELECT ta.title as title,ta.article_link as article_link, tu.pic_url as pic_url,tu.`nickname` as nickname,tu.`read_peas` as read_peas
+    <select id="selectRankData" resultMap="rankData">
+      SELECT ta.title AS title,ta.article_link AS article_link, tu.pic_url AS pic_url,tu.`nickname` AS nickname,tu.`read_peas` AS read_peas
         FROM t_article ta
         LEFT JOIN t_user_article tua ON ta.article_id=tua.article_id
         LEFT JOIN t_user tu ON tu.`user_id`=tua.`user_id`
-        WHERE tua.`user_id`=#{userId} ORDER BY ta.`create_time` DESC LIMIT 1
+        WHERE ta.delate_flg=0 AND isTop=1 ORDER BY ta.`create_time` DESC, tu.`read_peas` DESC
     </select>
 
 </mapper>
