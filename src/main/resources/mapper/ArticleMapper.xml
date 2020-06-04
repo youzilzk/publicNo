@@ -8,10 +8,14 @@
         <result property="title" column="title"/>
         <result property="articleLink" column="article_link"/>
         <result property="createTime" column="create_time"/>
-       <!-- <result property="delateFlg" column="delate_flg"/>-->
+       <!-- <result property="deleteFlg" column="delete_flg"/>-->
     </resultMap>
     <select id="selectArticlesByUserId" parameterType="Integer" resultMap="articles">
-      select * from t_article where article_id in (SELECT article_id FROM t_user_article WHERE user_id=#{userId}) and delate_flg=0 order by create_time desc
+        SELECT *
+        FROM t_article
+        WHERE article_id IN (SELECT article_id FROM t_user_article WHERE user_id=#{userId})
+        AND delete_flg=0
+        ORDER BY isTop DESC, create_time DESC
     </select>
 
     <!--插入文章-->
@@ -19,6 +23,7 @@
         <selectKey resultType="Integer" keyProperty="articleId" order="AFTER">
             select LAST_INSERT_ID()
         </selectKey>
-        insert into t_article(title,article_link,isTop) values (#{title},#{articleLink},#{isTop})
+        insert into t_article(title,article_link,isTop)
+        values (#{title},#{articleLink},#{isTop})
     </insert>
 </mapper>

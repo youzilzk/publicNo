@@ -23,7 +23,7 @@ public class User {
     @Column(name = "read_peas")
     private Integer readPeas;
     @Column(name = "phone")
-    private Integer phone;
+    private String phone;
     @Column(name = "register_time")
-    private Integer registerTime;
+    private String registerTime;
 }

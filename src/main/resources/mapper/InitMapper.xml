@@ -23,19 +23,27 @@
     </select>
 
     <!--查询所有排行文章-->
-    <resultMap id="rankData" type="com.project.publicNo.pojo.RankData">
+    <resultMap id="rankData" type="RankData">
         <id property="publisher" column="nickname"/>
         <result column="pic_url" property="userPic"/>
         <result column="title" property="articleTitle"/>
         <result column="read_peas" property="exposure"/>
         <result column="article_link" property="articleUrl"/>
+        <result column="isTop" property="isTop"/>
     </resultMap>
     <select id="selectRankData" resultMap="rankData">
-      SELECT ta.title AS title,ta.article_link AS article_link, tu.pic_url AS pic_url,tu.`nickname` AS nickname,tu.`read_peas` AS read_peas
+     SELECT ta.title AS title,ta.article_link AS article_link, tu.pic_url AS pic_url,tu.`nickname` AS nickname,tu.`read_peas` AS read_peas,ta.`isTop`
         FROM t_article ta
         LEFT JOIN t_user_article tua ON ta.article_id=tua.article_id
         LEFT JOIN t_user tu ON tu.`user_id`=tua.`user_id`
-        WHERE ta.delate_flg=0 AND isTop=1 ORDER BY ta.`create_time` DESC, tu.`read_peas` DESC
+        WHERE ta.delete_flg=0
+        AND title IS NOT NULL
+        AND article_link IS NOT NULL
+        AND pic_url IS NOT NULL
+        AND nickname IS NOT NULL
+        AND read_peas IS NOT NULL
+        AND ta.`isTop` IS NOT NULL
+        ORDER BY ta.`create_time` DESC, tu.`read_peas` DESC
     </select>
 
 </mapper>

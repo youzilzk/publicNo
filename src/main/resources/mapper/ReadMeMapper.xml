@@ -3,7 +3,19 @@
 <mapper namespace="com.project.publicNo.dao.ReadMeDao">
 
     <!--查询1用户发布的所有文章-->
-    <select id="getReadMeInfo" parameterType="Integer" resultType="User">
-        SELECT user_id,nickname,pic_url,read_peas,phone,register_time FROM t_user WHERE user_id IN (SELECT reader_id FROM t_readme WHERE author_id=#{userId})
+    <resultMap id="readMeData" type="ReadMeData">
+        <id column="user_id" property="userId"/>
+        <result column="nickname" property="nickname"/>
+        <result column="pic_url" property="picUrl"/>
+        <result column="read_peas" property="readPeas"/>
+        <result column="phone" property="phone"/>
+        <result column="register_time" property="registerTime"/>
+        <result column="read_time" property="readTime"/>
+    </resultMap>
+    <select id="getReadMeInfo" parameterType="Integer" resultMap="readMeData">
+       SELECT tu.user_id AS user_id,tu.nickname AS nickname,tu.pic_url AS pic_url,tu.read_peas AS read_peas,tu.phone AS phone,tu.register_time AS register_time,tr.read_time AS read_time
+        FROM t_user tu RIGHT JOIN t_readMe tr ON tu.user_id=tr.reader_id
+        WHERE tu.user_id IN (SELECT reader_id FROM t_readme WHERE author_id=#{userId})
+        ORDER BY tu.read_peas DESC,tr.read_time DESC
     </select>
 </mapper>

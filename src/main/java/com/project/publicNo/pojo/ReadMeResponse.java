@@ -9,5 +9,5 @@ import java.util.ArrayList;
 @Data
 @ToString
 public class ReadMeResponse extends Response {
-    private ArrayList<User> users;
+    private ArrayList<ReadMeData> readMeData;
 }

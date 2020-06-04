@@ -15,24 +15,28 @@ public class PublicNoController {
     private PublicNoService publicNoService;
 
     @RequestMapping(value = "/userInfo")
-    public LoginResponse userInfo(@RequestParam(value = "userId") Integer userId){
+    public Response userInfo(@RequestParam(value = "userId") Integer userId){
         return publicNoService.loginService(userId);
     }
 
     @RequestMapping(value = "/initPage")
-    public InitResponse initPage(@RequestParam(value = "userId") Integer userId){
+    public Response initPage(@RequestParam(value = "userId") Integer userId){
         return publicNoService.initService(userId);
     }
 
     @RequestMapping("/articles")
-    public ArticleResponse getArticles(@RequestParam(value = "userId") Integer userId){
+    public Response getArticles(@RequestParam(value = "userId") Integer userId){
         return publicNoService.getArticles(userId);
     }
 
     @RequestMapping("/addArticle")
+    //业务层实事务控制,异常捕获放在控制层
     public Response addArticle(@RequestBody Map<String,String> map){
        try {
-           publicNoService.addArticle(map);
+           int i = publicNoService.addArticle(map);
+           if(i==0){
+               return new Response(false,"阅豆不足!");
+           }
            return new Response(true,"发布文章成功!");
        }catch (Exception e){
            return new Response(false,"发布文章失败!");
@@ -40,7 +44,18 @@ public class PublicNoController {
     }
 
     @RequestMapping("/readMeInfo")
-    public ReadMeResponse getReadMeInfo(@RequestParam(value = "userId") Integer userId){
+    public Response getReadMeInfo(@RequestParam(value = "userId") Integer userId){
         return publicNoService.getReadMeInfo(userId);
+    }
+
+    @RequestMapping("/delArticle")
+    public Response delArticle(@RequestParam(value = "articleId") Integer articleId){
+        try {
+            publicNoService.delArticle(articleId);
+            return new Response(true,"下架文章成功!");
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Response(false,"下架文章失败!");
+        }
     }
 }

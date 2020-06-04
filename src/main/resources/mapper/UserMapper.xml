@@ -4,6 +4,15 @@
 
     <!--更新阅豆-->
     <update id="updateReadPeas" parameterType="User">
-        UPDATE t_user SET read_peas=read_peas-#{readPeas} WHERE user_id=#{userId}
+        UPDATE t_user
+        SET read_peas=read_peas-#{readPeas}
+        WHERE user_id=#{userId}
     </update>
+
+    <!--查询阅豆数-->
+    <select id="selectReadPeasByUserId" parameterType="Integer" resultType="Integer">
+         SELECT read_peas
+         FROM t_user
+         WHERE user_id=#{userId}
+    </select>
 </mapper>

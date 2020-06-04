@@ -22,6 +22,6 @@ public class Article {
     private String createTime;
     @Column(name = "isTop")
     private Integer isTop;
-//    @Column(name = "delate_flg")
-//    private String delateFlg;
+    @Column(name = "delete_flg")
+    private Integer deleteFlg;
 }
