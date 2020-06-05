@@ -127,9 +127,6 @@ public class PublicNoService {
             readMeResponse.setResult(true);
             readMeResponse.setReaponseMessage("查询阅我用户列表成功!");
             readMeResponse.setReadMeData(readMeInfo);
-            for (int i = 0; i < readMeInfo.size(); i++) {
-                System.out.println(readMeInfo.get(i).toString());
-            }
             return readMeResponse;
         }catch (Exception e){
             e.printStackTrace();

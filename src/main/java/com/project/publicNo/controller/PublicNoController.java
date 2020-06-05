@@ -3,6 +3,7 @@ package com.project.publicNo.controller;
 import com.project.publicNo.pojo.*;
 import com.project.publicNo.service.PublicNoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -30,6 +31,7 @@ public class PublicNoController {
     }
 
     @RequestMapping("/addArticle")
+    @PreAuthorize("hasAuthority('LOGIN')")
     //业务层实事务控制,异常捕获放在控制层
     public Response addArticle(@RequestBody Map<String,String> map){
        try {
@@ -39,6 +41,7 @@ public class PublicNoController {
            }
            return new Response(true,"发布文章成功!");
        }catch (Exception e){
+           e.printStackTrace();
            return new Response(false,"发布文章失败!");
        }
     }
@@ -49,6 +52,7 @@ public class PublicNoController {
     }
 
     @RequestMapping("/delArticle")
+    @PreAuthorize("hasAuthority('LOGIN')")
     public Response delArticle(@RequestParam(value = "articleId") Integer articleId){
         try {
             int i = publicNoService.delArticle(articleId);
@@ -63,4 +67,6 @@ public class PublicNoController {
             return new Response(false,"下架文章失败!");
         }
     }
+
+    //public void
 }
