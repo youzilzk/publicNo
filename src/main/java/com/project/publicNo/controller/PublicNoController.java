@@ -20,8 +20,8 @@ public class PublicNoController {
     }
 
     @RequestMapping(value = "/initPage")
-    public Response initPage(@RequestParam(value = "userId") Integer userId){
-        return publicNoService.initService(userId);
+    public Response initPage(){
+        return publicNoService.initService();
     }
 
     @RequestMapping("/articles")
@@ -51,8 +51,13 @@ public class PublicNoController {
     @RequestMapping("/delArticle")
     public Response delArticle(@RequestParam(value = "articleId") Integer articleId){
         try {
-            publicNoService.delArticle(articleId);
-            return new Response(true,"下架文章成功!");
+            int i = publicNoService.delArticle(articleId);
+            switch (i){
+                case 0:return new Response(false,"文章不存在!");
+                case 1:return new Response(true,"下架文章成功!");
+                case 2:return new Response(false,"文章已下架,勿重复操作!");
+                default:return new Response(false,"系统异常!");
+            }
         }catch (Exception e){
             e.printStackTrace();
             return new Response(false,"下架文章失败!");

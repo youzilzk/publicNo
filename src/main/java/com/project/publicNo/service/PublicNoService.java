@@ -29,40 +29,36 @@ public class PublicNoService {
     private ReadMeDao readMeDao;
 
     //获取登录的用户信息
-    public LoginResponse loginService(int userId){
+    public Response loginService(int userId){
        try {
            User user=new User();
+
            user.setUserId(userId);
            User selectOne = userDao.selectOne(user);
            //把密码置空,防止网络中传输
            selectOne.setPassword("");
-           LoginResponse loginResponse = new LoginResponse(selectOne);
-           loginResponse.setResult(true);
-           loginResponse.setReaponseMessage("获取登录用户信息成功!");
-           return loginResponse;
+           //根据用户id查询阅豆
+           int readPeas = initDao.selectReadPeas(userId);
+           //查询该用户发布的文章数
+           int articleCount = initDao.selectArticleCount(userId);
+           //查询待阅数
+           int waitReadCount = initDao.selectWaitReadCount(userId);
+           UserInfoResponse userInfoResponse = new UserInfoResponse(
+                   userId,selectOne.getNickname(), selectOne.getPassword(),
+                   selectOne.getPicUrl(),selectOne.getReadPeas(),selectOne.getPhone(),
+                   selectOne.getRegisterTime(),articleCount,waitReadCount);
+           userInfoResponse.setResult(true);
+           userInfoResponse.setReaponseMessage("获取用户信息成功!");
+           return userInfoResponse;
        }catch (Exception e){
            e.printStackTrace();
-           LoginResponse loginResponse = new LoginResponse();
-           loginResponse.setResult(false);
-           loginResponse.setReaponseMessage("获取登录用户信息失败!");
-           return loginResponse;
+           return new Response(false,"获取用户信息失败!");
        }
     }
     //初始化首页
-    public InitResponse initService(int userId){
+    public Response initService(){
         try {
             InitResponse initResponse = new InitResponse();
-            //根据用户id查询阅豆
-            int readPeas = initDao.selectReadPeas(userId);
-            initResponse.setReadPeas(readPeas);
-            //查询该用户发布的文章数
-            int articleCount = initDao.selectArticleCount(userId);
-            initResponse.setArticleCount(articleCount);
-            //查询待阅数
-            int waitReadCount = initDao.selectWaitReadCount(userId);
-            initResponse.setWaitReadCount(waitReadCount);
-            //查询所有用户,并根据阅豆从大到小对用户排序
-            //ArrayList<Integer> userIdList = initDao.selectAllRankUser();
             //查询阅读排行
             ArrayList<RankData> rankList=initDao.selectRankData();
             initResponse.setRankList(rankList);
@@ -71,15 +67,12 @@ public class PublicNoService {
             return initResponse;
         }catch (Exception e){
             e.printStackTrace();
-            InitResponse initResponse = new InitResponse();
-            initResponse.setReaponseMessage("查询失败!");
-            initResponse.setResult(false);
-            return initResponse;
+            return new Response(false,"查询失败!");
         }
     }
 
     //获取用户所有文章
-    public ArticleResponse getArticles(int userId){
+    public Response getArticles(int userId){
       try {
           ArrayList<Article> articles = articleDao.selectArticlesByUserId(userId);
           ArticleResponse response = new ArticleResponse();
@@ -89,10 +82,7 @@ public class PublicNoService {
           return response;
       }catch (Exception e){
           e.printStackTrace();
-          ArticleResponse response = new ArticleResponse();
-          response.setReaponseMessage("查询用户文章失败!");
-          response.setResult(false);
-          return response;
+          return new Response(false,"查询用户文章失败!");
       }
     }
 
@@ -107,7 +97,7 @@ public class PublicNoService {
         if(isTop==1){
             int i = userDao.selectReadPeasByUserId(userId);
             if(i<readPeas){
-                return 0;
+                return 0;//阅豆不足,直接返回
             }
         }
         //插入文章表前初始化参数
@@ -130,24 +120,33 @@ public class PublicNoService {
     }
 
     //查询阅我用户信息
-    public ReadMeResponse getReadMeInfo(int userId){
-        ArrayList<ReadMeData> readMeInfo = readMeDao.getReadMeInfo(userId);
-        ReadMeResponse readMeResponse = new ReadMeResponse();
-        readMeResponse.setResult(true);
-        readMeResponse.setReaponseMessage("查询阅我用户列表成功!");
-        readMeResponse.setReadMeData(readMeInfo);
-        for (int i = 0; i < readMeInfo.size(); i++) {
-            System.out.println(readMeInfo.get(i).toString());
+    public Response getReadMeInfo(int userId){
+        try {
+            ArrayList<ReadMeData> readMeInfo = readMeDao.getReadMeInfo(userId);
+            ReadMeResponse readMeResponse = new ReadMeResponse();
+            readMeResponse.setResult(true);
+            readMeResponse.setReaponseMessage("查询阅我用户列表成功!");
+            readMeResponse.setReadMeData(readMeInfo);
+            for (int i = 0; i < readMeInfo.size(); i++) {
+                System.out.println(readMeInfo.get(i).toString());
+            }
+            return readMeResponse;
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Response(false,"查询阅我用户列表失败!");
         }
-        return readMeResponse;
     }
 
     //删除文章
     @Transactional(rollbackFor = Exception.class)
-    public void delArticle(int articleId){
+    public int delArticle(int articleId){
         Article article = new Article();
         article.setArticleId(articleId);
+        Article selectOne = articleDao.selectOne(article);
+        if(selectOne.getDeleteFlg()==1){
+            return 2;//返回2表示,文章已经删除
+        }
         article.setDeleteFlg(1);
-        articleDao.updateByPrimaryKeySelective(article);
+        return articleDao.updateByPrimaryKeySelective(article);
     }
 }
