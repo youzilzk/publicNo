@@ -17,7 +17,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        //此栗子已在微服务写好查询数据库方法,直接远程调用
+        //直接远程调用UserAuthority类
         return userAuthority.getUserAuthority(Integer.parseInt(username));
     }
 }

@@ -22,13 +22,13 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) throws Exception {
         //忽略哪些资源不用security来管理
         web.ignoring().antMatchers("/api/userInfo","/api/initPage","/api/articles","/api/readMeInfo");
-
     }
 
     //采用bcrypt对密码进行编码,也可以new 一个MD5加密, 看需要
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new SimplePasswordEncoder();
+        //对密码使用密文储存,如果明文存储,可使用自定义的SimplePasswordEncoder类
+        return new BCryptPasswordEncoder();
     }
 //    @Override
 //    public void configure(HttpSecurity http) throws Exception {

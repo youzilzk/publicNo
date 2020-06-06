@@ -1,6 +1,7 @@
-package com.project.publicNo.pojo;
+package com.project.publicNo.pojo.impl;
 
 import com.project.publicNo.entity.User;
+import com.project.publicNo.pojo.Response;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.ToString;
