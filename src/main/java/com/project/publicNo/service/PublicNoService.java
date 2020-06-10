@@ -95,9 +95,10 @@ public class PublicNoService {
         Article article = new Article();
         int userId = Integer.parseInt(map.get("userId"));
         int isTop = Integer.parseInt(map.get("isTop"));
-        int readPeas = Integer.parseInt(map.get("readPeas"));
+        int readPeas=0;
         //如果用户开启置顶,则先判断用户阅豆是否足够置顶消耗
         if(isTop==1){
+            readPeas = Integer.parseInt(map.get("readPeas"));
             int i = userDao.selectReadPeasByUserId(userId);
             if(i<readPeas){
                 return 0;//阅豆不足,直接返回
