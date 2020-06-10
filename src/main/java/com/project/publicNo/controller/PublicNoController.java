@@ -3,7 +3,6 @@ package com.project.publicNo.controller;
 import com.project.publicNo.pojo.*;
 import com.project.publicNo.service.PublicNoService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -36,7 +35,6 @@ public class PublicNoController {
     }
 
     @RequestMapping("/addArticle")
-    @PreAuthorize("hasAuthority('LOGIN')")
     //业务层实事务控制,异常捕获放在控制层
     public Response addArticle(@RequestBody Map<String,String> map){
        try {
