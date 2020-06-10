@@ -5,7 +5,12 @@ import com.project.publicNo.service.PublicNoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Map;
 
 @RestController
@@ -52,7 +57,6 @@ public class PublicNoController {
     }
 
     @RequestMapping("/delArticle")
-    @PreAuthorize("hasAuthority('LOGIN')")
     public Response delArticle(@RequestParam(value = "articleId") Integer articleId){
         try {
             int i = publicNoService.delArticle(articleId);
@@ -68,5 +72,21 @@ public class PublicNoController {
         }
     }
 
-    //public void
+    @RequestMapping("/reAddArticle")
+    public Response putArticle(@RequestParam(value = "articleId") Integer articleId){
+        try {
+            int i = publicNoService.reAddArticle(articleId);
+            switch (i){
+                case 0:return new Response(false,"文章不存在!");
+                case 1:return new Response(true,"上架文章成功!");
+                case 2:return new Response(false,"文章已上架,勿重复操作!");
+                default:return new Response(false,"系统异常!");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Response(false,"上架文章失败!");
+        }
+    }
+
+
 }

@@ -143,10 +143,29 @@ public class PublicNoService {
         Article article = new Article();
         article.setArticleId(articleId);
         Article selectOne = articleDao.selectOne(article);
+        if(selectOne.getDeleteFlg()==null){
+            return 0;//表示文章不存在
+        }
         if(selectOne.getDeleteFlg()==1){
             return 2;//返回2表示,文章已经删除
         }
         article.setDeleteFlg(1);
+        return articleDao.updateByPrimaryKeySelective(article);
+    }
+
+    //上架文章
+    @Transactional(rollbackFor = Exception.class)
+    public int reAddArticle(int articleId){
+        Article article = new Article();
+        article.setArticleId(articleId);
+        Article selectOne = articleDao.selectOne(article);
+        if(selectOne.getDeleteFlg()==null){
+            return 0;//表示文章不存在
+        }
+        if(selectOne.getDeleteFlg()==0){
+            return 2;//返回2表示,文章已经上架
+        }
+        article.setDeleteFlg(0);
         return articleDao.updateByPrimaryKeySelective(article);
     }
 }
