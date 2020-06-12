@@ -169,4 +169,10 @@ public class PublicNoService {
         article.setDeleteFlg(0);
         return articleDao.updateByPrimaryKeySelective(article);
     }
+
+    public User getUser(int userId){
+        User user = new User();
+        user.setUserId(userId);
+        return userDao.selectOne(user);
+    }
 }

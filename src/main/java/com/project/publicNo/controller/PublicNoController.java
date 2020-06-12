@@ -1,15 +1,14 @@
 package com.project.publicNo.controller;
 
+import com.project.publicNo.entity.User;
 import com.project.publicNo.pojo.*;
 import com.project.publicNo.service.PublicNoService;
+import com.sun.xml.internal.fastinfoset.util.CharArrayString;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.ModelAndView;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 import java.util.Map;
 
 @RestController
@@ -18,7 +17,8 @@ import java.util.Map;
 public class PublicNoController {
     @Autowired
     private PublicNoService publicNoService;
-
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
     @RequestMapping(value = "/userInfo")
     public Response userInfo(@RequestParam(value = "userId") Integer userId){
         return publicNoService.loginService(userId);
@@ -87,4 +87,20 @@ public class PublicNoController {
     }
 
 
+    @RequestMapping("/login")
+    public Response loginPage(HttpServletResponse response,@RequestParam(value = "userId") Integer userId,@RequestParam(value = "password") String password){
+        User user = publicNoService.getUser(userId);
+        if(user.getPassword()==null){
+            return new Response(false,"用户不存在!");
+        }
+        boolean matches = passwordEncoder.matches(password, user.getPassword());
+        if(!matches){
+            return new Response(false,"用户或密码错误!");
+        }else {//userId+user.getPassword()
+            String encode = passwordEncoder.encode(new CharArrayString(userId + user.getPassword()));
+            Cookie cookie = new Cookie(userId.toString(), encode);
+            response.addCookie(cookie);
+            return new Response(true,"登录成功!");
+        }
+    }
 }
