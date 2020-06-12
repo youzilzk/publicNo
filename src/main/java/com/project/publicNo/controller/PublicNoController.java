@@ -3,7 +3,6 @@ package com.project.publicNo.controller;
 import com.project.publicNo.entity.User;
 import com.project.publicNo.pojo.*;
 import com.project.publicNo.service.PublicNoService;
-import com.sun.xml.internal.fastinfoset.util.CharArrayString;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
@@ -97,7 +96,7 @@ public class PublicNoController {
         if(!matches){
             return new Response(false,"用户或密码错误!");
         }else {//userId+user.getPassword()
-            String encode = passwordEncoder.encode(new CharArrayString(userId + user.getPassword()));
+            String encode = passwordEncoder.encode(new String(userId + user.getPassword()));
             Cookie cookie = new Cookie(userId.toString(), encode);
             response.addCookie(cookie);
             return new Response(true,"登录成功!");
