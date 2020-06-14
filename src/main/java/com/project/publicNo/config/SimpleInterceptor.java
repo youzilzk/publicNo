@@ -32,10 +32,8 @@ public class SimpleInterceptor implements HandlerInterceptor {
                     }
                 }
                 if ("".equals(userId)) {
-                    PrintWriter writer = response.getWriter();
                     response.setContentType("application/json;charset=utf-8");
-//                    response.setCharacterEncoding("UTF-8");
-//                    response.setHeader("content-type", "application/json;charset=UTF-8");
+                    PrintWriter writer = response.getWriter();
                     String json = JSON.toJSONString(new Response(false, "进行此操作,请先登录!"));
                     writer.write(json);
                     writer.flush();
@@ -43,10 +41,8 @@ public class SimpleInterceptor implements HandlerInterceptor {
                     return false;
                 }
                 if (!userId.equals(request.getParameter("userId"))) {
-                    PrintWriter writer = response.getWriter();
                     response.setContentType("application/json;charset=utf-8");
-//                    response.setCharacterEncoding("UTF-8");
-//                    response.setHeader("content-type", "application/json;charset=UTF-8");
+                    PrintWriter writer = response.getWriter();
                     String json = JSON.toJSONString(new Response(false, "请务操作他人文章!"));
                     writer.write(json);
                     writer.flush();
@@ -61,10 +57,8 @@ public class SimpleInterceptor implements HandlerInterceptor {
                     }
                 }
                 if ("".equals(token)) {
-                    PrintWriter writer = response.getWriter();
                     response.setContentType("application/json;charset=utf-8");
-//                    response.setCharacterEncoding("UTF-8");
-//                    response.setHeader("content-type", "application/json;charset=UTF-8");
+                    PrintWriter writer = response.getWriter();
                     String json = JSON.toJSONString(new Response(false, "令牌丢失,请重新授权登录!"));
                     writer.write(json);
                     writer.flush();
@@ -75,10 +69,8 @@ public class SimpleInterceptor implements HandlerInterceptor {
                 BeanFactory factory = WebApplicationContextUtils.getRequiredWebApplicationContext(request.getServletContext());
                 BCryptPasswordEncoder passwordEncoder = (BCryptPasswordEncoder) factory.getBean("bCryptPasswordEncoder");
                 if (!passwordEncoder.matches(new String(openId + userId), token)) {
-                    PrintWriter writer = response.getWriter();
                     response.setContentType("application/json;charset=utf-8");
-//                    response.setCharacterEncoding("UTF-8");
-//                    response.setHeader("content-type", "application/json;charset=UTF-8");
+                    PrintWriter writer = response.getWriter();
                     String json = JSON.toJSONString(new Response(false, "令牌非法,请重新登录确认!"));
                     writer.write(json);
                     writer.flush();
