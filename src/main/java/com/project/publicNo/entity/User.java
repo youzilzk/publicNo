@@ -16,8 +16,8 @@ public class User {
     private Integer userId;
     @Column(name = "nickname")
     private String nickname;
-    @Column(name = "password")
-    private String password;
+    @Column(name = "openid")
+    private String openid;
     @Column(name = "pic_url")
     private String picUrl;
     @Column(name = "read_peas")

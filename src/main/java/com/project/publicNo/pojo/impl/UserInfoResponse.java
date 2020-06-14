@@ -12,7 +12,7 @@ import lombok.ToString;
 public class UserInfoResponse extends Response {
     private Integer userId;
     private String nickname;
-    private String password;
+    private String openid;
     private String picUrl;
     private Integer readPeas;
     private String phone;

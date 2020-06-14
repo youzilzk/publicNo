@@ -2,7 +2,8 @@
 SQLyog v10.2 
 MySQL - 5.7.28 : Database - project
 *********************************************************************
-*/
+*/
+
 
 /*!40101 SET NAMES utf8 */;
 
@@ -65,7 +66,7 @@ CREATE TABLE `t_user` (
 
 /*Data for the table `t_user` */
 
-insert  into `t_user`(`user_id`,`nickname`,`password`,`pic_url`,`read_peas`,`phone`,`register_time`) values (1312466325,'荷花',NULL,'miao',3,'','2020-05-28 17:37:02'),(1396511473,'寻',NULL,'bj3',5,'','2020-05-28 17:37:02'),(1555693665,'简单1',NULL,'bj4',7,'','2020-05-28 17:37:02'),(1773244177,'花花1',NULL,'timg',4,'','2020-05-28 17:39:49'),(2147483647,'好好先生',NULL,'bj4',8,'','2020-05-29 21:25:16');
+insert  into `t_user`(`user_id`,`nickname`,`openid`,`pic_url`,`read_peas`,`phone`,`register_time`) values (1312466325,'荷花',NULL,'miao',3,'','2020-05-28 17:37:02'),(1396511473,'寻',NULL,'bj3',5,'','2020-05-28 17:37:02'),(1555693665,'简单1',NULL,'bj4',7,'','2020-05-28 17:37:02'),(1773244177,'花花1',NULL,'timg',4,'','2020-05-28 17:39:49'),(2147483647,'好好先生',NULL,'bj4',8,'','2020-05-29 21:25:16');
 
 /*Table structure for table `t_user_article` */
 
