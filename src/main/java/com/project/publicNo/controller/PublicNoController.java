@@ -128,7 +128,7 @@ public class PublicNoController {
             response.addCookie(token);
             //存session
             request.getSession().setAttribute(userId, openid);
-            return new LoginResponse(true, "登录成功!", loginType);
+            return new LoginResponse(true, "登录成功!", Integer.parseInt(userId),loginType);
         } catch (Exception e) {
             e.printStackTrace();
             return new Response(false, "系统异常!");
