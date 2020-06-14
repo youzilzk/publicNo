@@ -21,46 +21,52 @@ public class SimpleInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String path = request.getServletPath();
-        if(path.equals("/api/completeUserInfo")||path.equals("/api/reAddArticle")||path.equals("/api/delArticle")||path.equals("/api/addArticle")){
+        if (path.equals("/api/completeUserInfo") || path.equals("/api/reAddArticle") || path.equals("/api/delArticle") || path.equals("/api/addArticle")) {
             try {
                 Cookie[] cookies = request.getCookies();
-                String userId="";
+                String userId = "";
                 for (int i = 0; i < cookies.length; i++) {
-                    if(cookies[i].getName().equals("uid")){
-                        userId= cookies[i].getValue();
+                    if (cookies[i].getName().equals("uid")) {
+                        userId = cookies[i].getValue();
                         break;
                     }
                 }
-                if("".equals(userId)){
+                if ("".equals(userId)) {
                     PrintWriter writer = response.getWriter();
                     response.setContentType("application/json;charset=utf-8");
-                    Object json = JSON.toJSON(new Response(false, "进行此操作,请先登录!"));
-                    writer.write(json.toString());
+//                    response.setCharacterEncoding("UTF-8");
+//                    response.setHeader("content-type", "application/json;charset=UTF-8");
+                    String json = JSON.toJSONString(new Response(false, "进行此操作,请先登录!"));
+                    writer.write(json);
                     writer.flush();
                     writer.close();
                     return false;
                 }
-                if(!userId.equals(request.getParameter("userId"))){
+                if (!userId.equals(request.getParameter("userId"))) {
                     PrintWriter writer = response.getWriter();
                     response.setContentType("application/json;charset=utf-8");
-                    Object json = JSON.toJSON(new Response(false, "请务操作他人文章!"));
-                    writer.write(json.toString());
+//                    response.setCharacterEncoding("UTF-8");
+//                    response.setHeader("content-type", "application/json;charset=UTF-8");
+                    String json = JSON.toJSONString(new Response(false, "请务操作他人文章!"));
+                    writer.write(json);
                     writer.flush();
                     writer.close();
                     return false;
                 }
-                String token="";
+                String token = "";
                 for (int i = 0; i < cookies.length; i++) {
-                    if(userId.equals(cookies[i].getName())){
-                        token= cookies[i].getValue();
+                    if (userId.equals(cookies[i].getName())) {
+                        token = cookies[i].getValue();
                         break;
                     }
                 }
-                if("".equals(token)){
+                if ("".equals(token)) {
                     PrintWriter writer = response.getWriter();
                     response.setContentType("application/json;charset=utf-8");
-                    Object json = JSON.toJSON(new Response(false, "令牌丢失,请重新授权登录!"));
-                    writer.write(json.toString());
+//                    response.setCharacterEncoding("UTF-8");
+//                    response.setHeader("content-type", "application/json;charset=UTF-8");
+                    String json = JSON.toJSONString(new Response(false, "令牌丢失,请重新授权登录!"));
+                    writer.write(json);
                     writer.flush();
                     writer.close();
                     return false;
@@ -68,17 +74,19 @@ public class SimpleInterceptor implements HandlerInterceptor {
                 String openId = (String) request.getSession().getAttribute(userId);
                 BeanFactory factory = WebApplicationContextUtils.getRequiredWebApplicationContext(request.getServletContext());
                 BCryptPasswordEncoder passwordEncoder = (BCryptPasswordEncoder) factory.getBean("bCryptPasswordEncoder");
-                if(!passwordEncoder.matches(new String(openId+userId),token)){
+                if (!passwordEncoder.matches(new String(openId + userId), token)) {
                     PrintWriter writer = response.getWriter();
                     response.setContentType("application/json;charset=utf-8");
-                    Object json = JSON.toJSON(new Response(false, "令牌非法,请重新登录确认!"));
-                    writer.write(json.toString());
+//                    response.setCharacterEncoding("UTF-8");
+//                    response.setHeader("content-type", "application/json;charset=UTF-8");
+                    String json = JSON.toJSONString(new Response(false, "令牌非法,请重新登录确认!"));
+                    writer.write(json);
                     writer.flush();
                     writer.close();
                     return false;
                 }
                 return true;
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
