@@ -34,7 +34,6 @@ public class PublicNoController {
             }
         }
         if (userId_session.equals("") || !userId_session.equals(userId.toString())) {
-            boolean a = userId_session.equals(userId);
             String isSelf = "0";
             return publicNoService.loginService(userId, isSelf);
         } else {
