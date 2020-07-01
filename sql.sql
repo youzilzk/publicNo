@@ -2,8 +2,7 @@
 SQLyog v10.2 
 MySQL - 5.7.28 : Database - project
 *********************************************************************
-*/
-
+*/
 
 /*!40101 SET NAMES utf8 */;
 
@@ -28,12 +27,13 @@ CREATE TABLE `t_article` (
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `delete_flg` tinyint(1) NOT NULL DEFAULT '0',
   `isTop` tinyint(1) NOT NULL DEFAULT '0',
+  `article_status` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`article_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=345345373 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=345345375 DEFAULT CHARSET=utf8;
 
 /*Data for the table `t_article` */
 
-insert  into `t_article`(`article_id`,`title`,`article_link`,`create_time`,`delete_flg`,`isTop`) values (12345,'他还是个','gzsfd','2020-05-28 20:22:40',1,1),(86756,'让人tea个人','shsgf','2020-05-28 20:21:54',1,1),(1321231,'特哈热热热台湾','shdgsdfs','2020-05-28 20:20:44',0,1),(5467564,'jet和认识','rhtsgsf','2020-05-28 22:21:25',0,1),(123123123,'如何变成帅哥','www.baidu.com','2020-05-30 21:12:11',0,1),(234234234,'如何让富婆爱上我','www.baidu.com','2020-05-27 21:12:11',0,1),(345345345,'如何快速致富','www.baidu.com','2020-05-27 21:12:11',0,1),(345345346,'人家无色让他如果','ueyrter','2020-06-03 14:50:54',0,1),(345345347,'可他依然他','yjdhgdsfh','2020-06-03 14:52:03',1,1),(345345348,'添加用户的感受','ykjtyhgdf','2020-06-03 15:42:59',0,1),(345345366,'酷酷酷酷酷','kdyjdhgsf','2020-06-03 19:38:37',0,1),(345345367,'酷酷酷酷酷','kdyjdhgsf','2020-06-03 19:39:17',0,1),(345345368,'酷酷酷酷酷','kdyjdhgsf','2020-06-03 19:40:25',0,1),(345345369,'酷酷酷酷酷','kdyjdhgsf','2020-06-03 19:41:53',0,0),(345345370,'酷酷酷酷酷','kdyjdhgsf','2020-06-03 19:42:41',0,0),(345345371,'给客户了解','jdfhsdgsdfsd','2020-06-04 10:49:54',0,1);
+insert  into `t_article`(`article_id`,`title`,`article_link`,`create_time`,`delete_flg`,`isTop`,`article_status`) values (666,'酷酷酷酷酷','kdyjdhgsf','2020-06-03 19:39:17',0,1,1),(12345,'他还是个','gzsfd','2020-05-28 20:22:40',1,1,1),(86756,'让人tea个人','shsgf','2020-05-28 20:21:54',1,1,1),(1321231,'特哈热热热台湾','shdgsdfs','2020-05-28 20:20:44',0,1,1),(5467564,'jet和认识','rhtsgsf','2020-05-28 22:21:25',0,1,1),(123123123,'如何变成帅哥','www.baidu.com','2020-05-30 21:12:11',0,1,1),(234234234,'如何让富婆爱上我','www.baidu.com','2020-05-27 21:12:11',0,1,1),(345345345,'如何快速致富','www.baidu.com','2020-05-27 21:12:11',0,1,1),(345345346,'人家无色让他如果','ueyrter','2020-06-03 14:50:54',0,1,1),(345345347,'可他依然他','yjdhgdsfh','2020-06-03 14:52:03',1,1,1),(345345348,'添加用户的感受','ykjtyhgdf','2020-06-03 15:42:59',0,1,1),(345345366,'酷酷酷酷酷','kdyjdhgsf','2020-06-03 19:38:37',0,1,1),(345345368,'酷酷酷酷酷','kdyjdhgsf','2020-06-03 19:40:25',0,1,1),(345345369,'酷酷酷酷酷','kdyjdhgsf','2020-06-03 19:41:53',0,0,1),(345345370,'酷酷酷酷酷','kdyjdhgsf','2020-06-03 19:42:41',0,0,1),(345345371,'给客户了解','jdfhsdgsdfsd','2020-06-04 10:49:54',0,1,1),(345345372,'的肌肤的规划','jdfhsdgsdfsd','2020-06-10 13:22:40',0,1,1),(345345373,'的肌肤的规划','jdfhsdgsdfsd','2020-06-10 19:44:31',0,1,1),(345345374,'xxxxxxooo','cgvhjbn','2020-06-14 19:52:29',0,1,1);
 
 /*Table structure for table `t_readme` */
 
@@ -56,17 +56,17 @@ DROP TABLE IF EXISTS `t_user`;
 CREATE TABLE `t_user` (
   `user_id` int(10) NOT NULL AUTO_INCREMENT,
   `nickname` varchar(32) DEFAULT NULL,
-  `password` varchar(32) DEFAULT NULL,
+  `openid` varchar(64) NOT NULL,
   `pic_url` varchar(32) DEFAULT NULL,
-  `read_peas` int(10) unsigned NOT NULL,
-  `phone` varchar(32) NOT NULL,
+  `read_peas` int(10) unsigned NOT NULL DEFAULT '0',
+  `phone` varchar(32) DEFAULT NULL,
   `register_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   UNIQUE KEY `user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2147483647 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2147480005 DEFAULT CHARSET=utf8;
 
 /*Data for the table `t_user` */
 
-insert  into `t_user`(`user_id`,`nickname`,`openid`,`pic_url`,`read_peas`,`phone`,`register_time`) values (1312466325,'荷花',NULL,'miao',3,'','2020-05-28 17:37:02'),(1396511473,'寻',NULL,'bj3',5,'','2020-05-28 17:37:02'),(1555693665,'简单1',NULL,'bj4',7,'','2020-05-28 17:37:02'),(1773244177,'花花1',NULL,'timg',4,'','2020-05-28 17:39:49'),(2147483647,'好好先生',NULL,'bj4',8,'','2020-05-29 21:25:16');
+insert  into `t_user`(`user_id`,`nickname`,`openid`,`pic_url`,`read_peas`,`phone`,`register_time`) values (1312466325,'荷花','12345','miao',3,'','2020-05-28 17:37:02'),(1396511473,'寻','123456','bj3',0,'','2020-05-28 17:37:02'),(1555693665,'简单1','12','bj4',7,'','2020-05-28 17:37:02'),(1773244177,'花花1','123','timg',4,'','2020-05-28 17:39:49'),(2147480000,'好好先生','1234','bj4',8,'','2020-05-29 21:25:16'),(2147480001,NULL,'7070',NULL,0,NULL,'2020-06-14 18:57:40'),(2147480002,NULL,'7071',NULL,0,NULL,'2020-06-14 18:58:08'),(2147480003,NULL,'707',NULL,0,NULL,'2020-06-14 18:58:15'),(2147480004,NULL,'1777',NULL,0,NULL,'2020-06-14 22:21:31');
 
 /*Table structure for table `t_user_article` */
 
@@ -79,7 +79,7 @@ CREATE TABLE `t_user_article` (
 
 /*Data for the table `t_user_article` */
 
-insert  into `t_user_article`(`user_id`,`article_id`) values (1396511473,123123123),(1312466325,1321231),(2147483647,234234234),(2147483647,5467564),(1396511473,345345345),(1396511473,86756),(1396511473,12345),(1396511473,345345366),(1396511473,345345367),(1396511473,345345368),(1396511473,345345369),(1396511473,345345370),(1396511473,345345371);
+insert  into `t_user_article`(`user_id`,`article_id`) values (1396511473,123123123),(1312466325,10010),(2147483647,234234234),(2147483647,5467564),(1396511473,345345345),(1396511473,666),(1396511473,12345),(1396511473,345345366),(1396511473,345345367),(1396511473,345345368),(1396511473,345345369),(1396511473,345345370),(1396511473,345345371),(1396511473,345345372),(1396511473,345345373),(1396511473,345345374);
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

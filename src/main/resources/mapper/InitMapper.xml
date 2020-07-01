@@ -37,6 +37,7 @@
         LEFT JOIN t_user_article tua ON ta.article_id=tua.article_id
         LEFT JOIN t_user tu ON tu.`user_id`=tua.`user_id`
         WHERE ta.delete_flg=0
+        and article_status=1
         AND title IS NOT NULL
         AND article_link IS NOT NULL
         AND pic_url IS NOT NULL

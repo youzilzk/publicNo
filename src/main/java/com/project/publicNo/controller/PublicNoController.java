@@ -74,15 +74,15 @@ public class PublicNoController {
                 case 0:
                     return new Response(false, "文章不存在!");
                 case 1:
-                    return new Response(true, "下架文章成功!");
+                    return new Response(true, "删除文章成功!");
                 case 2:
-                    return new Response(false, "文章已下架,勿重复操作!");
+                    return new Response(false, "文章已删除,勿重复操作!");
                 default:
                     return new Response(false, "系统异常!");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            return new Response(false, "文章不存在,下架失败!");
+            return new Response(false, "文章不存在,删除失败!");
         }
     }
 
@@ -106,6 +106,29 @@ public class PublicNoController {
         } catch (Exception e) {
             e.printStackTrace();
             return new Response(false, "文章不存在,上架失败!");
+        }
+    }
+
+    @RequestMapping("/removeArticle")
+    public Response popArticle(@RequestParam(value = "userId") Integer userId, @RequestParam(value = "articleId") Integer articleId) {
+        try {
+            if (!publicNoService.userMatchArticle(userId, articleId)) {
+                return new Response(false, "用户和文章不匹配!");
+            }
+            int i = publicNoService.removeArticle(articleId);
+            switch (i) {
+                case 0:
+                    return new Response(false, "文章不存在!");
+                case 1:
+                    return new Response(true, "下架文章成功!");
+                case 2:
+                    return new Response(false, "文章已下架,勿重复操作!");
+                default:
+                    return new Response(false, "系统异常!");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Response(false, "文章不存在,下架失败!");
         }
     }
 

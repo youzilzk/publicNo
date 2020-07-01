@@ -112,6 +112,7 @@ public class PublicNoService {
         article.setTitle(map.get("title"));
         article.setArticleLink(map.get("articleLink"));
         article.setIsTop(isTop);
+        article.setArticleStatus(1);
         //插入文章表
         articleDao.insertArticle(article);
         //添加用户和文章映射
@@ -172,13 +173,29 @@ public class PublicNoService {
         Article article = new Article();
         article.setArticleId(articleId);
         Article selectOne = articleDao.selectOne(article);
-        if (selectOne.getDeleteFlg() == null) {
+        if (selectOne.getArticleStatus() == null) {
             return 0;//表示文章不存在
         }
-        if (selectOne.getDeleteFlg().equals(0)) {
+        if (selectOne.getArticleStatus().equals(1)) {
             return 2;//返回2表示,文章已经上架
         }
-        article.setDeleteFlg(0);
+        article.setArticleStatus(1);
+        return articleDao.updateByPrimaryKeySelective(article);
+    }
+
+    //下架文章
+    @Transactional(rollbackFor = Exception.class)
+    public int removeArticle(int articleId) {
+        Article article = new Article();
+        article.setArticleId(articleId);
+        Article selectOne = articleDao.selectOne(article);
+        if (selectOne.getArticleStatus() == null) {
+            return 0;//表示文章不存在
+        }
+        if (selectOne.getArticleStatus().equals(0)) {
+            return 2;//返回2表示,文章已经下架
+        }
+        article.setArticleStatus(0);
         return articleDao.updateByPrimaryKeySelective(article);
     }
 

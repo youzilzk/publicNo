@@ -23,5 +23,10 @@ public class Article {
     @Column(name = "isTop")
     private Integer isTop;
     @Column(name = "delete_flg")
+    //1-删除 0-未删除
     private Integer deleteFlg;
+     @Column(name = "article_status")
+    //1-已上架 0-已下架
+    private Integer articleStatus;
+
 }

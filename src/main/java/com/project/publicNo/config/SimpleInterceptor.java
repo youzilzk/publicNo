@@ -3,14 +3,11 @@ package com.project.publicNo.config;
 import com.alibaba.fastjson.JSON;
 import com.project.publicNo.pojo.Response;
 import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import javax.annotation.Resource;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -21,7 +18,7 @@ public class SimpleInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String path = request.getServletPath();
-        if (path.equals("/api/completeUserInfo") || path.equals("/api/reAddArticle") || path.equals("/api/delArticle") || path.equals("/api/addArticle")) {
+        if (path.equals("/api/completeUserInfo") || path.equals("/api/reAddArticle") || path.equals("/api/removeArticle") || path.equals("/api/delArticle") || path.equals("/api/addArticle")) {
             try {
                 Cookie[] cookies = request.getCookies();
                 String userId = "";
