@@ -15,6 +15,9 @@
         FROM t_article
         WHERE article_id IN (SELECT article_id FROM t_user_article WHERE user_id=#{userId})
         AND delete_flg=0
+        <if test="isSelf ==0">
+            and article_status=1
+        </if>
         ORDER BY isTop DESC, create_time DESC
     </select>
 

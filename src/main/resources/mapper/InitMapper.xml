@@ -9,11 +9,20 @@
 
     <!--查询用户的文章-->
     <select id="selectArticleCount" parameterType="Integer" resultType="Integer">
-        SELECT count(*) FROM t_user_article WHERE user_id=#{userId}
+        SELECT COUNT(*) FROM t_article as ta LEFT join t_user_article as tua on ta.article_id=tua.article_id
+        <choose>
+            <when test="isSelf ==1">
+                where ta.delete_flg=0 and tua.user_id=#{userId}
+            </when>
+            <when test="isSelf ==0">
+                where ta.delete_flg=0 and article_status=1 and tua.user_id=#{userId}
+            </when>
+        </choose>
+
     </select>
 
     <!--查询所有参与排行的用户id-->
-    <select id="selectAllRankUser"  resultType="Integer">
+    <select id="selectAllRankUser" resultType="Integer">
         SELECT user_id FROM t_user order by read_peas desc
     </select>
 

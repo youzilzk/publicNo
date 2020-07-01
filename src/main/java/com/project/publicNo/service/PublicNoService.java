@@ -32,16 +32,15 @@ public class PublicNoService {
     private ReadMeDao readMeDao;
 
     //获取登录的用户信息
-    public Response loginService(int userId) {
+    public Response loginService(int userId,String isSelf) {
         try {
             User user = new User();
-
             user.setUserId(userId);
             User selectOne = userDao.selectOne(user);
             //根据用户id查询阅豆
             int readPeas = initDao.selectReadPeas(userId);
             //查询该用户发布的文章数
-            int articleCount = initDao.selectArticleCount(userId);
+            int articleCount = initDao.selectArticleCount(userId,Integer.parseInt(isSelf));
             //查询待阅数
             int waitReadCount = initDao.selectWaitReadCount(userId);
             UserInfoResponse userInfoResponse = new UserInfoResponse(
@@ -74,9 +73,9 @@ public class PublicNoService {
     }
 
     //获取用户所有文章
-    public Response getArticles(int userId) {
+    public Response getArticles(int userId,String isSelf) {
         try {
-            ArrayList<Article> articles = articleDao.selectArticlesByUserId(userId);
+            ArrayList<Article> articles = articleDao.selectArticlesByUserId(userId,Integer.parseInt(isSelf));
             ArticleResponse response = new ArticleResponse();
             response.setArticles(articles);
             response.setReaponseMessage("查询用户文章成功!");

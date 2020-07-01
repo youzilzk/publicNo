@@ -24,8 +24,23 @@ public class PublicNoController {
     private BCryptPasswordEncoder passwordEncoder;
 
     @RequestMapping(value = "/userInfo")
-    public Response userInfo(@RequestParam(value = "userId") Integer userId) {
-        return publicNoService.loginService(userId);
+    public Response userInfo(@RequestParam(value = "userId") Integer userId, HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        String userId_session = "";
+        for (int i = 0; i < cookies.length; i++) {
+            if (cookies[i].getName().equals("uid")) {
+                userId_session = cookies[i].getValue();
+                break;
+            }
+        }
+        if (userId_session.equals("") || !userId_session.equals(userId.toString())) {
+            boolean a = userId_session.equals(userId);
+            String isSelf = "0";
+            return publicNoService.loginService(userId, isSelf);
+        } else {
+            String isSelf = "1";
+            return publicNoService.loginService(userId, isSelf);
+        }
     }
 
     @RequestMapping(value = "/initPage")
@@ -34,19 +49,34 @@ public class PublicNoController {
     }
 
     @RequestMapping("/articles")
-    public Response getArticles(@RequestParam(value = "userId") Integer userId) {
-        return publicNoService.getArticles(userId);
+    public Response getArticles(@RequestParam(value = "userId") Integer userId,HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        String userId_session = "";
+        for (int i = 0; i < cookies.length; i++) {
+            if (cookies[i].getName().equals("uid")) {
+                userId_session = cookies[i].getValue();
+                break;
+            }
+        }
+        if (userId_session.equals("") || !userId_session.equals(userId.toString())) {
+            boolean a = userId_session.equals(userId);
+            String isSelf = "0";
+            return publicNoService.getArticles(userId, isSelf);
+        } else {
+            String isSelf = "1";
+            return publicNoService.getArticles(userId, isSelf);
+        }
     }
 
     @RequestMapping("/addArticle")
     //业务层实事务控制,异常捕获放在控制层
-    public Response addArticle(@RequestParam(value = "userId") String userId,@RequestParam(value = "title") String title,@RequestParam(value = "articleLink") String articleLink,@RequestParam(value = "isTop") String isTop) {
+    public Response addArticle(@RequestParam(value = "userId") String userId, @RequestParam(value = "title") String title, @RequestParam(value = "articleLink") String articleLink, @RequestParam(value = "isTop") String isTop) {
         try {
             HashMap<String, String> map = new HashMap<>();
-            map.put("userId",userId);
-            map.put("title",title);
-            map.put("articleLink",articleLink);
-            map.put("isTop",isTop);
+            map.put("userId", userId);
+            map.put("title", title);
+            map.put("articleLink", articleLink);
+            map.put("isTop", isTop);
             int i = publicNoService.addArticle(map);
             if (i == 0) {
                 return new Response(false, "阅豆不足!");
@@ -151,7 +181,7 @@ public class PublicNoController {
             response.addCookie(token);
             //存session
             request.getSession().setAttribute(userId, openid);
-            return new LoginResponse(true, "登录成功!", Integer.parseInt(userId),loginType);
+            return new LoginResponse(true, "登录成功!", Integer.parseInt(userId), loginType);
         } catch (Exception e) {
             e.printStackTrace();
             return new Response(false, "系统异常!");
