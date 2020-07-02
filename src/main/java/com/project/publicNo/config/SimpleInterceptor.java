@@ -24,10 +24,12 @@ public class SimpleInterceptor implements HandlerInterceptor {
             try {
                 Cookie[] cookies = request.getCookies();
                 String userId = "";
-                for (int i = 0; i < cookies.length; i++) {
-                    if (cookies[i].getName().equals("uid")) {
-                        userId = cookies[i].getValue();
-                        break;
+                if (cookies != null) {
+                    for (int i = 0; i < cookies.length; i++) {
+                        if (cookies[i].getName().equals("uid")) {
+                            userId = cookies[i].getValue();
+                            break;
+                        }
                     }
                 }
                 if ("".equals(userId)) {
@@ -79,6 +81,13 @@ public class SimpleInterceptor implements HandlerInterceptor {
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();
+                response.setContentType("application/json;charset=utf-8");
+                PrintWriter writer = response.getWriter();
+                String json = JSON.toJSONString(new Response(false, "系统异常!"));
+                writer.write(json);
+                writer.flush();
+                writer.close();
+                return false;
             }
         }
         return true;
