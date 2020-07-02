@@ -27,10 +27,12 @@ public class PublicNoController {
     public Response userInfo(@RequestParam(value = "userId") Integer userId, HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         String userId_session = "";
-        for (int i = 0; i < cookies.length; i++) {
-            if (cookies[i].getName().equals("uid")) {
-                userId_session = cookies[i].getValue();
-                break;
+        if (cookies != null) {
+            for (int i = 0; i < cookies.length; i++) {
+                if (cookies[i].getName().equals("uid")) {
+                    userId_session = cookies[i].getValue();
+                    break;
+                }
             }
         }
         if (userId_session.equals("") || !userId_session.equals(userId.toString())) {
@@ -48,13 +50,15 @@ public class PublicNoController {
     }
 
     @RequestMapping("/articles")
-    public Response getArticles(@RequestParam(value = "userId") Integer userId,HttpServletRequest request) {
+    public Response getArticles(@RequestParam(value = "userId") Integer userId, HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
         String userId_session = "";
-        for (int i = 0; i < cookies.length; i++) {
-            if (cookies[i].getName().equals("uid")) {
-                userId_session = cookies[i].getValue();
-                break;
+        if (cookies != null) {
+            for (int i = 0; i < cookies.length; i++) {
+                if (cookies[i].getName().equals("uid")) {
+                    userId_session = cookies[i].getValue();
+                    break;
+                }
             }
         }
         if (userId_session.equals("") || !userId_session.equals(userId.toString())) {
