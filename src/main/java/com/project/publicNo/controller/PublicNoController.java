@@ -44,8 +44,9 @@ public class PublicNoController {
             return publicNoService.loginService(userId, isSelf);
         } else {
             String isSelf = "1";
-            System.out.println("userId="+userId+" and "+"isSelf="+isSelf);
-            return publicNoService.loginService(userId, isSelf);
+            Response response = publicNoService.loginService(userId, isSelf);
+            System.out.println("publicNoService.loginService(userId, isSelf)\n"+response);
+            return response;
         }
     }
 
