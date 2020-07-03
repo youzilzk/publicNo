@@ -37,18 +37,23 @@ public class PublicNoService {
             User user = new User();
             user.setUserId(userId);
             User selectOne = userDao.selectOne(user);
+            System.out.println("selectOne:\n"+selectOne);
             //根据用户id查询阅豆
             int readPeas = initDao.selectReadPeas(userId);
+            System.out.println("readPeas:\n"+readPeas);
             //查询该用户发布的文章数
             int articleCount = initDao.selectArticleCount(userId,Integer.parseInt(isSelf));
+            System.out.println("articleCount:\n"+articleCount);
             //查询待阅数
             int waitReadCount = initDao.selectWaitReadCount(userId);
+            System.out.println("waitReadCount:\n"+waitReadCount);
             UserInfoResponse userInfoResponse = new UserInfoResponse(
                     userId, selectOne.getNickname(), selectOne.getOpenid(),
                     selectOne.getPicUrl(), selectOne.getReadPeas(), selectOne.getPhone(),
                     selectOne.getRegisterTime(), articleCount, waitReadCount);
             userInfoResponse.setResult(true);
             userInfoResponse.setReaponseMessage("获取用户信息成功!");
+            System.out.println("获取用户信息成功:\n");
             return userInfoResponse;
         } catch (Exception e) {
             e.printStackTrace();

@@ -39,9 +39,11 @@ public class PublicNoController {
         System.out.println("2222222222");
         if (userId_session.equals("") || !userId_session.equals(userId.toString())) {
             String isSelf = "0";
+            System.out.println("userId="+userId+" and "+"isSelf="+isSelf);
             return publicNoService.loginService(userId, isSelf);
         } else {
             String isSelf = "1";
+            System.out.println("userId="+userId+" and "+"isSelf="+isSelf);
             return publicNoService.loginService(userId, isSelf);
         }
     }
