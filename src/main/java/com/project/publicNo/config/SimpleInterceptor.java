@@ -20,6 +20,7 @@ public class SimpleInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String path = request.getServletPath();
+        response.setHeader("Access-Control-Allow-Credentials","true");
         if (path.equals("/api/completeUserInfo") || path.equals("/api/reAddArticle") || path.equals("/api/removeArticle") || path.equals("/api/delArticle") || path.equals("/api/addArticle")) {
             try {
                 Cookie[] cookies = request.getCookies();
