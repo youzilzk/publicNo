@@ -179,7 +179,7 @@ public class PublicNoController {
             }
             String userId = user.getUserId().toString();
             Cookie uid = new Cookie("uid", userId);
-            Cookie token = new Cookie(userId, passwordEncoder.encode(new String(openid + userId)));//token=openid+userId
+            Cookie token = new Cookie("token", passwordEncoder.encode(new String(openid + userId)));//token=openid+userId
             response.addCookie(uid);
             response.addCookie(token);
             //存session
