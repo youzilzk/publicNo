@@ -36,6 +36,7 @@ public class PublicNoController {
                 }
             }
         }
+        System.out.println("userId_session="+userId_session+" and "+"userId="+userId);
         System.out.println("2222222222");
         if (userId_session.equals("") || !userId_session.equals(userId.toString())) {
             String isSelf = "0";
