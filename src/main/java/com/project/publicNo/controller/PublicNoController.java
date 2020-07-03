@@ -26,6 +26,7 @@ public class PublicNoController {
     @RequestMapping(value = "/userInfo")
     public Response userInfo(@RequestParam(value = "userId") Integer userId, HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
+        System.out.println("11111111111");
         String userId_session = "";
         if (cookies != null) {
             for (int i = 0; i < cookies.length; i++) {
@@ -35,6 +36,7 @@ public class PublicNoController {
                 }
             }
         }
+        System.out.println("2222222222");
         if (userId_session.equals("") || !userId_session.equals(userId.toString())) {
             String isSelf = "0";
             return publicNoService.loginService(userId, isSelf);
