@@ -1,17 +1,25 @@
 package com.project.publicNo.controller;
 
+import com.alibaba.fastjson.JSON;
 import com.project.publicNo.entity.User;
 import com.project.publicNo.pojo.*;
 import com.project.publicNo.pojo.impl.LoginResponse;
 import com.project.publicNo.service.PublicNoService;
+import com.project.publicNo.utils.ImgUtil;
+import com.project.publicNo.utils.QRCodeUtil;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.imageio.ImageIO;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.awt.image.BufferedImage;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -203,6 +211,30 @@ public class PublicNoController {
         } catch (Exception e) {
             e.printStackTrace();
             return new Response(false, "系统异常!");
+        }
+    }
+
+    @RequestMapping("/share")
+    public void share(@Param("shareId") String shareId, HttpServletResponse response) throws Exception{
+        try {
+            BufferedImage qrcodeImage = QRCodeUtil.encode("123.56.134.30?shareId=" + shareId, "src/main/resources/img/logo.jpg", true);
+            InputStream inputStream = ImgUtil.load(qrcodeImage, "src/main/resources/img/background.jpg");
+            ServletOutputStream outputStream = response.getOutputStream();
+            byte[] bytes=new byte[1024];
+            while (inputStream.read(bytes)!=-1){
+                outputStream.write(bytes,0,bytes.length);
+                outputStream.flush();
+            }
+            outputStream.close();
+            inputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setContentType("application/json;charset=utf-8");
+            PrintWriter writer = response.getWriter();
+            String json = JSON.toJSONString(new Response(false, "系统错误,请检查请求参数!"));
+            writer.write(json);
+            writer.flush();
+            writer.close();
         }
     }
 }

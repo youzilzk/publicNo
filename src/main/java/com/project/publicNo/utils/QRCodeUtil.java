@@ -12,6 +12,8 @@ import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Hashtable;
 
 public class QRCodeUtil {
@@ -20,9 +22,9 @@ public class QRCodeUtil {
     // 二维码尺寸
     private static final int QRCODE_SIZE = 300;
     // LOGO宽度
-    private static final int WIDTH = 60;
+    private static final int WIDTH = 70;
     // LOGO高度
-    private static final int HEIGHT = 60;
+    private static final int HEIGHT = 70;
 
     private static BufferedImage createImage(String content, String insertImgPath, boolean needCompress) throws Exception {
         Hashtable hints = new Hashtable();
@@ -48,12 +50,19 @@ public class QRCodeUtil {
     }
 
     private static void insertImage(BufferedImage source, String insertImgPath, boolean needCompress) throws Exception {
+        Image src=null;
         File file = new File(insertImgPath);
-        if (!file.exists()) {
-            System.err.println("" + insertImgPath + "   该文件不存在！");
-            return;
+        if (file.exists()) {
+            src= ImageIO.read(new File(insertImgPath));
+        }else {
+            URL url = new URL(insertImgPath);
+            HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
+            if(urlConnection.getResponseCode()==200){
+                src=ImageIO.read(url);
+            }else {
+                return;
+            }
         }
-        Image src = ImageIO.read(new File(insertImgPath));
         int width = src.getWidth(null);
         int height = src.getHeight(null);
         if (needCompress) { // 压缩LOGO
