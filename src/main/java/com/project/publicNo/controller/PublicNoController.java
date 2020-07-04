@@ -179,6 +179,21 @@ public class PublicNoController {
 
     @RequestMapping("/login")
     public Response loginPage(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "openid") String openid) {
+        Cookie[] cookies = request.getCookies();
+        String shareId = "";
+        //尝试获取shareId
+        if (cookies != null) {
+            for (int i = 0; i < cookies.length; i++) {
+                if (cookies[i].getName().equals("shareId")) {
+                    shareId = cookies[i].getValue();
+                    break;
+                }
+            }
+        }
+        //如果用户来自他人分享,则对分享用户增加阅豆奖励
+        if(!shareId.equals("")){
+            publicNoService.addReadpeaForShareUser(Integer.valueOf(shareId));
+        }
         try {
             int loginType = 2;
             User user = publicNoService.getUser(openid);

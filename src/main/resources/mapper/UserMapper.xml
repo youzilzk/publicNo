@@ -2,10 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.project.publicNo.dao.UserDao">
 
-    <!--更新阅豆-->
-    <update id="updateReadPeas" parameterType="User">
+    <!--消费阅豆-->
+    <update id="subReadPeas" parameterType="User">
         UPDATE t_user
         SET read_peas=read_peas-#{readPeas}
+        WHERE user_id=#{userId}
+    </update>
+
+    <!--奖励阅豆-->
+    <update id="addReadPeas" parameterType="User">
+        UPDATE t_user
+        SET read_peas=read_peas+#{readPeas}
         WHERE user_id=#{userId}
     </update>
 
@@ -15,4 +22,6 @@
          FROM t_user
          WHERE user_id=#{userId}
     </select>
+
+
 </mapper>

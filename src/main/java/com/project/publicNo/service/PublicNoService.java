@@ -122,7 +122,7 @@ public class PublicNoService {
             User user = new User();
             user.setUserId(userId);
             user.setReadPeas(readPeas);
-            userDao.updateReadPeas(user);
+            userDao.subReadPeas(user);
         }
         return 1;
     }
@@ -221,5 +221,11 @@ public class PublicNoService {
         user.setReadPeas(null);
         user.setRegisterTime(null);
         return userDao.updateByPrimaryKeySelective(user);
+    }
+
+    public int addReadpeaForShareUser(Integer shareId){
+        User user = new User();
+        user.setUserId(shareId);
+        return userDao.addReadPeas(user);
     }
 }
