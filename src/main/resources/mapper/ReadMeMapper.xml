@@ -11,10 +11,10 @@
         <result column="phone" property="phone"/>
         <result column="register_time" property="registerTime"/>
         <result column="read_time" property="readTime"/>
-    </resultMap>
+    </resultMap>m
     <select id="getReadMeInfo" parameterType="Integer" resultMap="readMeData">
        SELECT tu.user_id AS user_id,tu.nickname AS nickname,tu.pic_url AS pic_url,tu.read_peas AS read_peas,tu.phone AS phone,tu.register_time AS register_time,tr.read_time AS read_time
-        FROM t_user tu RIGHT JOIN t_readMe tr ON tu.user_id=tr.reader_id
+        FROM t_user tu RIGHT JOIN t_reade tr ON tu.user_id=tr.reader_id
         WHERE tu.user_id IN (SELECT reader_id FROM t_readme WHERE author_id=#{userId})
         ORDER BY tu.read_peas DESC,tr.read_time DESC
     </select>
