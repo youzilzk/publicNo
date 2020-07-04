@@ -50,16 +50,17 @@ public class QRCodeUtil {
     }
 
     private static void insertImage(BufferedImage source, String insertImgPath, boolean needCompress) throws Exception {
-        Image src=null;
+        Image src = null;
         File file = new File(insertImgPath);
+        System.out.println("\ngetAbsolutePath:\n"+file.getAbsolutePath());
         if (file.exists()) {
-            src= ImageIO.read(new File(insertImgPath));
-        }else {
+            src = ImageIO.read(new File(insertImgPath));
+        } else {
             URL url = new URL(insertImgPath);
-            HttpURLConnection urlConnection = (HttpURLConnection)url.openConnection();
-            if(urlConnection.getResponseCode()==200){
-                src=ImageIO.read(url);
-            }else {
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+            if (urlConnection.getResponseCode() == 200) {
+                src = ImageIO.read(url);
+            } else {
                 return;
             }
         }
@@ -89,7 +90,8 @@ public class QRCodeUtil {
         graph.draw(shape);
         graph.dispose();
     }
-//包含logo的生成方式
+
+    //包含logo的生成方式
     public static void encode(String content, String insertImgPath, String resultPath, boolean needCompress) throws Exception {
         BufferedImage image = QRCodeUtil.createImage(content, insertImgPath, needCompress);
         mkdirs(resultPath);
@@ -112,7 +114,8 @@ public class QRCodeUtil {
     public static void encode(String content, String insertImgPath, String resultPath) throws Exception {
         QRCodeUtil.encode(content, insertImgPath, resultPath, false);
     }
-     public static void encode(String content, String resultPath) throws Exception {
+
+    public static void encode(String content, String resultPath) throws Exception {
         QRCodeUtil.encode(content, resultPath, false);
     }
 
@@ -141,6 +144,7 @@ public class QRCodeUtil {
         String resultStr = result.getText();
         return resultStr;
     }
+
     public static String decode(String path) throws Exception {
         return QRCodeUtil.decode(new File(path));
     }
