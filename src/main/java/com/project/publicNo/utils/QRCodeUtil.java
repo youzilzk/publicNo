@@ -5,6 +5,8 @@ import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import jdk.nashorn.internal.runtime.regexp.JdkRegExp;
+import jdk.nashorn.internal.runtime.regexp.RegExp;
 import org.springframework.core.io.ClassPathResource;
 
 import javax.imageio.ImageIO;
@@ -12,10 +14,13 @@ import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Hashtable;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class QRCodeUtil {
     private static final String CHARSET = "utf-8";
@@ -50,23 +55,66 @@ public class QRCodeUtil {
         return image;
     }
 
+    private static URL getImageFromUrl(String imgUrl) {
+        try {
+            URL url = new URL(imgUrl);
+            //测试url是否合法
+            url.openConnection();
+            return url;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private static Image getImageFromLocal(String imgAddr) {
+        try {
+            ClassPathResource classPathResource = new ClassPathResource(imgAddr);
+            InputStream inputStream = classPathResource.getInputStream();
+            return ImageIO.read(inputStream);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     private static void insertImage(BufferedImage source, String insertImgPath, boolean needCompress) throws Exception {
         Image src = null;
-        ClassPathResource classPathResource = new ClassPathResource(insertImgPath);
-        File file = classPathResource.getFile();
-        System.out.println("\ngetAbsolutePath:\n"+file.getAbsolutePath());
-        if (file.exists()) {
-            src = ImageIO.read(file);
+        Image imageFromLocal = getImageFromLocal(insertImgPath);
+        if (imageFromLocal != null) {
+            src = imageFromLocal;
         } else {
-            URL url = new URL(insertImgPath);
-            try {
-                url.openConnection();
-                src = ImageIO.read(url);
-            }catch (Exception e){
-                e.printStackTrace();
-                return;
-            }
+            return;
         }
+        int width = src.getWidth(null);
+        int height = src.getHeight(null);
+        if (needCompress) { // 压缩LOGO
+            if (width > WIDTH) {
+                width = WIDTH;
+            }
+            if (height > HEIGHT) {
+                height = HEIGHT;
+            }
+            Image image = src.getScaledInstance(width, height, Image.SCALE_SMOOTH);
+            BufferedImage tag = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+            Graphics g = tag.getGraphics();
+            g.drawImage(image, 0, 0, null); // 绘制缩小后的图
+            g.dispose();
+            src = image;
+        }
+        // 插入LOGO
+        Graphics2D graph = source.createGraphics();
+        int x = (QRCODE_SIZE - width) / 2;
+        int y = (QRCODE_SIZE - height) / 2;
+        graph.drawImage(src, x, y, width, height, null);
+        Shape shape = new RoundRectangle2D.Float(x, y, width, width, 6, 6);
+        graph.setStroke(new BasicStroke(3f));
+        graph.draw(shape);
+        graph.dispose();
+    }
+
+    private static void insertImage(BufferedImage source, URL insertImgUrl, boolean needCompress) throws Exception {
+        Image src = ImageIO.read(insertImgUrl);
         int width = src.getWidth(null);
         int height = src.getHeight(null);
         if (needCompress) { // 压缩LOGO

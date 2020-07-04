@@ -1,5 +1,7 @@
 package com.project.publicNo.utils;
 
+import org.springframework.core.io.ClassPathResource;
+
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -35,8 +37,9 @@ public class ImgUtil {
          */
         public BufferedImage loadImageLocal(String imgAddress) {
             try {
-                File file = new File(imgAddress);
-                return ImageIO.read(file);
+                ClassPathResource classPathResource = new ClassPathResource(imgAddress);
+                InputStream inputStream = classPathResource.getInputStream();
+                return ImageIO.read(inputStream);
             } catch (IOException e) {
                 System.out.println(e.getMessage());
             }
