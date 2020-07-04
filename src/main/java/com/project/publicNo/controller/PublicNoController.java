@@ -232,7 +232,7 @@ public class PublicNoController {
     @RequestMapping("/share")
     public void share(@Param("userId") String userId, HttpServletResponse response) throws Exception{
         try {
-            BufferedImage qrcodeImage = QRCodeUtil.encode("123.56.134.30?shareId=" + userId, "img/logo.jpg", true);
+            BufferedImage qrcodeImage = QRCodeUtil.encode("http://123.56.134.30/api/visitor?shareId=" + userId, "img/logo.jpg", true);
             InputStream inputStream = ImgUtil.load(qrcodeImage, "img/background.jpg");
             ServletOutputStream outputStream = response.getOutputStream();
             byte[] bytes=new byte[1024];
