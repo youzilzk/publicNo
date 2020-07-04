@@ -1,10 +1,7 @@
 package com.project.publicNo.pojo.impl;
 
 import com.project.publicNo.pojo.Response;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
 
 
 @Data
