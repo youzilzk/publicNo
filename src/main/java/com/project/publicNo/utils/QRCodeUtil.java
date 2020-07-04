@@ -5,6 +5,7 @@ import com.google.zxing.client.j2se.BufferedImageLuminanceSource;
 import com.google.zxing.common.BitMatrix;
 import com.google.zxing.common.HybridBinarizer;
 import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
+import org.springframework.core.io.ClassPathResource;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -51,16 +52,18 @@ public class QRCodeUtil {
 
     private static void insertImage(BufferedImage source, String insertImgPath, boolean needCompress) throws Exception {
         Image src = null;
-        File file = new File(insertImgPath);
+        ClassPathResource classPathResource = new ClassPathResource(insertImgPath);
+        File file = classPathResource.getFile();
         System.out.println("\ngetAbsolutePath:\n"+file.getAbsolutePath());
         if (file.exists()) {
-            src = ImageIO.read(new File(insertImgPath));
+            src = ImageIO.read(file);
         } else {
             URL url = new URL(insertImgPath);
-            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-            if (urlConnection.getResponseCode() == 200) {
+            try {
+                url.openConnection();
                 src = ImageIO.read(url);
-            } else {
+            }catch (Exception e){
+                e.printStackTrace();
                 return;
             }
         }
