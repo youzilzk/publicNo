@@ -25,8 +25,11 @@ public class Article {
     @Column(name = "delete_flg")
     //1-删除 0-未删除
     private Integer deleteFlg;
-     @Column(name = "article_status")
+    @Column(name = "article_status")
     //1-已上架 0-已下架
     private Integer articleStatus;
+    //曝光度
+    @Column(name = "exposure")
+    private Integer exposure;
 
 }

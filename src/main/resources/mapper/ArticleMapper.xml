@@ -9,6 +9,7 @@
         <result property="articleLink" column="article_link"/>
         <result property="createTime" column="create_time"/>
         <result property="articleStatus" column="article_status"/>
+        <result property="exposure" column="exposure"/>
     </resultMap>
     <select id="selectArticlesByUserId" parameterType="Integer" resultMap="articles">
         SELECT *

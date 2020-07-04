@@ -36,22 +36,23 @@
         <id property="publisher" column="nickname"/>
         <result column="pic_url" property="userPic"/>
         <result column="title" property="articleTitle"/>
-        <result column="read_peas" property="exposure"/>
+        <result column="exposure" property="exposure"/>
         <result column="article_link" property="articleUrl"/>
         <result column="isTop" property="isTop"/>
     </resultMap>
     <select id="selectRankData" resultMap="rankData">
-     SELECT ta.title AS title,ta.article_link AS article_link, tu.pic_url AS pic_url,tu.`nickname` AS nickname,tu.`read_peas` AS read_peas,ta.`isTop`
+     SELECT ta.title AS title,ta.article_link AS article_link, tu.pic_url AS pic_url,tu.`nickname` AS nickname, ta.`exposure` AS exposure,ta.`isTop`
         FROM t_article ta
         LEFT JOIN t_user_article tua ON ta.article_id=tua.article_id
         LEFT JOIN t_user tu ON tu.`user_id`=tua.`user_id`
         WHERE ta.delete_flg=0
-        and article_status=1
+        AND article_status=1
         AND title IS NOT NULL
         AND article_link IS NOT NULL
         AND pic_url IS NOT NULL
         AND nickname IS NOT NULL
         AND read_peas IS NOT NULL
+        AND exposure IS NOT NULL
         AND ta.`isTop` IS NOT NULL
         ORDER BY ta.`create_time` DESC, tu.`read_peas` DESC
     </select>
