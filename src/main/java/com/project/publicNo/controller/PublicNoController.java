@@ -60,22 +60,21 @@ public class PublicNoController {
     @RequestMapping("/articles")
     public Response getArticles(@RequestParam(value = "userId") Integer userId, HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
-        String userId_session = "";
+        String userId_cookie = "";
         if (cookies != null) {
             for (int i = 0; i < cookies.length; i++) {
                 if (cookies[i].getName().equals("uid")) {
-                    userId_session = cookies[i].getValue();
+                    userId_cookie = cookies[i].getValue();
                     break;
                 }
             }
         }
-        if (userId_session.equals("") || !userId_session.equals(userId.toString())) {
-            boolean a = userId_session.equals(userId);
+        if (userId_cookie.equals("") || !userId_cookie.equals(userId.toString())) {
             String isSelf = "0";
-            return publicNoService.getArticles(userId, isSelf);
+            return publicNoService.getArticles(userId, isSelf,userId_cookie);
         } else {
             String isSelf = "1";
-            return publicNoService.getArticles(userId, isSelf);
+            return publicNoService.getArticles(userId, isSelf,userId_cookie);
         }
     }
 
@@ -189,7 +188,7 @@ public class PublicNoController {
         }
         //如果用户来自他人分享,则对分享用户增加阅豆奖励
         if(!shareId.equals("")){
-            publicNoService.addReadpeaForShareUser(Integer.valueOf(shareId));
+            publicNoService.addReadpeaForShareUser(Integer.valueOf(shareId),5);
         }
         try {
             int loginType = 2;

@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.project.publicNo.dao.ReadMeDao">
 
-    <!--查询1用户发布的所有文章-->
+    <!--查询阅我用户信息-->
     <resultMap id="readMeData" type="ReadMeData">
         <id column="user_id" property="userId"/>
         <result column="nickname" property="nickname"/>
@@ -17,5 +17,21 @@
         FROM t_user tu RIGHT JOIN t_readme tr ON tu.user_id=tr.reader_id
         WHERE tu.user_id IN (SELECT reader_id FROM t_readme WHERE author_id=#{userId})
         ORDER BY tu.read_peas DESC,tr.read_time DESC
+    </select>
+
+    <resultMap id="ReadOtherInfo" type="ReadArticle">
+        <result property="articleId" column="article_id"/>
+        <result property="readTime" column="read_time"/>
+    </resultMap>
+    <!--查询我阅读了某用户哪些文章-->
+    <select id="selectReadOtherInfoByMe" parameterType="Integer" resultMap="ReadOtherInfo">
+        select
+          tra.`article_id`,tra.`read_time`
+        from
+          t_read_article tra left join t_user_article tua on tra.`article_id`=tua.`article_id`
+        where
+          tua.`user_id`=#{authorId}
+        and
+          tra.`reader_id`=#{readerId}
     </select>
 </mapper>

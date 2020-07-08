@@ -3,6 +3,7 @@ package com.project.publicNo.service;
 
 import com.project.publicNo.dao.*;
 import com.project.publicNo.entity.Article;
+import com.project.publicNo.entity.ReadArticle;
 import com.project.publicNo.entity.User;
 import com.project.publicNo.entity.UserArticle;
 import com.project.publicNo.pojo.*;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 
 @Service
@@ -32,7 +34,7 @@ public class PublicNoService {
     private ReadMeDao readMeDao;
 
     //获取登录的用户信息
-    public Response loginService(int userId,String isSelf) {
+    public Response loginService(int userId, String isSelf) {
         try {
             User user = new User();
             user.setUserId(userId);
@@ -40,7 +42,7 @@ public class PublicNoService {
             //根据用户id查询阅豆
             int readPeas = initDao.selectReadPeas(userId);
             //查询该用户发布的文章数
-            int articleCount = initDao.selectArticleCount(userId,Integer.parseInt(isSelf));
+            int articleCount = initDao.selectArticleCount(userId, Integer.parseInt(isSelf));
             //查询待阅数
             int waitReadCount = initDao.selectWaitReadCount(userId);
             UserInfoResponse userInfoResponse = new UserInfoResponse(
@@ -73,10 +75,28 @@ public class PublicNoService {
     }
 
     //获取用户所有文章
-    public Response getArticles(int userId,String isSelf) {
+    /* isSelf区别是否为当前登录用户,有的信息不返回给非当前登录用户 */
+    public Response getArticles(int userId, String isSelf, String readerId) {
         try {
-            ArrayList<Article> articles = articleDao.selectArticlesByUserId(userId,Integer.parseInt(isSelf));
+            ArrayList<Article> articles = articleDao.selectArticlesByUserId(userId, Integer.parseInt(isSelf));
             ArticleResponse response = new ArticleResponse();
+            if (isSelf.equals("0") && !readerId.equals("")) {
+                int authorId = userId;
+                ArrayList<ReadArticle> readArticles = readMeDao.selectReadOtherInfoByMe(authorId, Integer.parseInt(readerId));
+                HashMap<Integer, Article> hashMap = new HashMap<>();
+                for (int i = 0; i < articles.size(); i++) {
+                    hashMap.put(articles.get(i).getArticleId(), articles.get(i));
+                }
+                for (int i = 0; i < readArticles.size(); i++) {
+                    ReadArticle readArticle = readArticles.get(i);
+                    hashMap.get(readArticle.getArticleId()).setReadStatus(1);
+                    hashMap.get(readArticle.getArticleId()).setReadTime(readArticle.getReadTime());
+                }
+                articles = new ArrayList<Article>();
+                for (Map.Entry<Integer, Article> entry : hashMap.entrySet()) {
+                    articles.add(entry.getValue());
+                }
+            }
             response.setArticles(articles);
             response.setReaponseMessage("查询用户文章成功!");
             response.setResult(true);
@@ -99,8 +119,8 @@ public class PublicNoService {
             try {
                 //不指定readPeas就默认给5
                 readPeas = Integer.parseInt(map.get("readPeas"));
-            }catch (Exception e){
-                readPeas=5;
+            } catch (Exception e) {
+                readPeas = 5;
             }
             int i = userDao.selectReadPeasByUserId(userId);
             if (i < readPeas) {
@@ -223,9 +243,10 @@ public class PublicNoService {
         return userDao.updateByPrimaryKeySelective(user);
     }
 
-    public int addReadpeaForShareUser(Integer shareId){
+    public int addReadpeaForShareUser(Integer shareId,Integer readPeas) {
         User user = new User();
         user.setUserId(shareId);
+        user.setReadPeas(readPeas);
         return userDao.addReadPeas(user);
     }
 }

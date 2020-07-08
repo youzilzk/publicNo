@@ -14,6 +14,7 @@
         <typeAlias alias="ReadMe" type="com.project.publicNo.entity.ReadMe" />
         <typeAlias alias="User" type="com.project.publicNo.entity.User" />
         <typeAlias alias="UserArticle" type="com.project.publicNo.entity.UserArticle" />
+        <typeAlias alias="ReadArticle" type="com.project.publicNo.entity.ReadArticle" />
         <typeAlias alias="ReadMeData" type="com.project.publicNo.pojo.ReadMeData" />
         <typeAlias alias="RankData" type="com.project.publicNo.pojo.RankData" />
 
