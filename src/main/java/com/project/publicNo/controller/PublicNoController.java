@@ -257,4 +257,10 @@ public class PublicNoController {
         response.addCookie(cookie);
         response.sendRedirect("http://123.56.134.30/#/");
     }
+
+    @RequestMapping("/readSuccess")
+    public void readSuccess(@Param("userId") String userId,@Param("articleId") String articleId, HttpServletRequest request,HttpServletResponse response) {
+
+
+    }
 }

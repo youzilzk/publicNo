@@ -19,11 +19,12 @@ public class SimpleInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String path = request.getServletPath();
-        response.setHeader("Access-Control-Allow-Origin",request.getHeader("Origin"));
-        response.setHeader("Access-Control-Allow-Credentials","true");
-        if (path.equals("/api/completeUserInfo") || path.equals("/api/reAddArticle") || path.equals("/api/removeArticle") || path.equals("/api/delArticle") || path.equals("/api/addArticle")) {
+        response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        if (path.equals("/api/readSuccess") || path.equals("/api/completeUserInfo") || path.equals("/api/reAddArticle") || path.equals("/api/removeArticle") || path.equals("/api/delArticle") || path.equals("/api/addArticle")) {
             try {
                 Cookie[] cookies = request.getCookies();
+                //检查登录状态
                 String userId = "";
                 if (cookies != null) {
                     for (int i = 0; i < cookies.length; i++) {
@@ -42,6 +43,7 @@ public class SimpleInterceptor implements HandlerInterceptor {
                     writer.close();
                     return false;
                 }
+                //检查是否为本人
                 if (!userId.equals(request.getParameter("userId"))) {
                     response.setContentType("application/json;charset=utf-8");
                     PrintWriter writer = response.getWriter();
@@ -51,6 +53,7 @@ public class SimpleInterceptor implements HandlerInterceptor {
                     writer.close();
                     return false;
                 }
+                //检查令牌是否合法
                 String token = "";
                 for (int i = 0; i < cookies.length; i++) {
                     if ("token".equals(cookies[i].getName())) {
