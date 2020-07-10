@@ -18,5 +18,6 @@ public class ReadMe {
     private Integer authorId;
     @Column(name = "read_time")
     private String readTime;
-
+    @Column(name = "read_count")
+    private String readCount;
 }

@@ -34,4 +34,18 @@
         and
           tra.`reader_id`=#{readerId}
     </select>
+
+    <!--查询阅我表是否有当前读者和作者关联-->
+    <select id="selectCount" parameterType="ReadMe" resultType="Integer">
+          select count(*)
+          from t_readme
+          where reader_id=#{readerId} and author_id=#{authorId}
+    </select>
+
+    <!--更新最近阅读时间-->
+    <update id="updateReadTime" parameterType="ReadMe">
+          update t_readme set read_count=read_count+1
+          where reader_id=#{readerId} and author_id=#{authorId}
+    </update>
+
 </mapper>

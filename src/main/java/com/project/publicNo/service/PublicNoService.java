@@ -2,10 +2,7 @@ package com.project.publicNo.service;
 
 
 import com.project.publicNo.dao.*;
-import com.project.publicNo.entity.Article;
-import com.project.publicNo.entity.ReadArticle;
-import com.project.publicNo.entity.User;
-import com.project.publicNo.entity.UserArticle;
+import com.project.publicNo.entity.*;
 import com.project.publicNo.pojo.*;
 import com.project.publicNo.pojo.impl.ArticleResponse;
 import com.project.publicNo.pojo.impl.InitResponse;
@@ -32,6 +29,8 @@ public class PublicNoService {
     private UserArticleDao userArticleDao;
     @Autowired
     private ReadMeDao readMeDao;
+    @Autowired
+    private ReadArticleDao ReadArticleDao;
 
     //获取登录的用户信息
     public Response loginService(int userId, String isSelf) {
@@ -248,5 +247,38 @@ public class PublicNoService {
         user.setUserId(shareId);
         user.setReadPeas(readPeas);
         return userDao.addReadPeas(user);
+    }
+    //阅读成功,给与奖励,更新数据等
+    @Transactional(rollbackFor = Exception.class)
+    public int readSuccess(String userId, String articleId){
+        ReadArticle readArticle = new ReadArticle();
+        readArticle.setArticleId(Integer.parseInt(articleId));
+        readArticle.setReaderId(Integer.parseInt(userId));
+        //插入阅读文章表
+        ReadArticleDao.insertSelective(readArticle);
+        //查询文章作者
+        UserArticle userArticle = new UserArticle();
+        userArticle.setArticleId(Integer.parseInt(articleId));
+        Integer authorId = userArticleDao.selectOne(userArticle).getUserId();
+        /*更新readMe表*/
+        //先查询有无记录
+        ReadMe readMe = new ReadMe();
+        readMe.setAuthorId(authorId);
+        readMe.setReaderId(Integer.parseInt(userId));
+        if (readMeDao.selectCount(readMe)==1){
+            //更新
+            readMeDao.updateReadTime(readMe);
+        }else {
+            //插入
+            readMeDao.insertSelective(readMe);
+        }
+        //更新文章曝光数
+        articleDao.updeteExposure(Integer.parseInt(articleId));
+        //更新用户阅豆
+        User user = new User();
+        user.setUserId(Integer.parseInt(userId));
+        user.setReadPeas(1);
+        userDao.addReadPeas(user);
+        return 1;
     }
 }

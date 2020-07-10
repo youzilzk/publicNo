@@ -30,4 +30,8 @@
         insert into t_article(title,article_link,isTop,article_status)
         values (#{title},#{articleLink},#{isTop},#{articleStatus})
     </insert>
+
+    <update id="updeteExposure" parameterType="Intrger">
+        update t_article set exposure=exposure+1 where article_id=#{articleId}
+    </update>
 </mapper>

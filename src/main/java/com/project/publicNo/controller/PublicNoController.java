@@ -259,8 +259,17 @@ public class PublicNoController {
     }
 
     @RequestMapping("/readSuccess")
-    public void readSuccess(@Param("userId") String userId,@Param("articleId") String articleId, HttpServletRequest request,HttpServletResponse response) {
-
-
+    public Response readSuccess(@Param("userId") String userId,@Param("articleId") String articleId) {
+        try {
+            int i = publicNoService.readSuccess(userId, articleId);
+            if(i==1){
+                return new Response(true,"更新数据成功!");
+            }else {
+                return new Response(false,"更新数据失败!");
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            return new Response(false,"更新数据失败,系统错误!");
+        }
     }
 }

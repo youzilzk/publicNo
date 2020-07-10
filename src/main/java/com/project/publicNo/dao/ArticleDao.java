@@ -11,4 +11,5 @@ public interface ArticleDao extends Mapper<Article>{
     public ArrayList<Article> selectArticlesByUserId(@Param("userId")int userId, @Param("isSelf")int isSelf);
     //添加文章
     public int insertArticle(Article article);
+    public int updeteExposure(Integer articleId);
 }
