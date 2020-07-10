@@ -242,20 +242,28 @@ public class PublicNoService {
         return userDao.updateByPrimaryKeySelective(user);
     }
 
-    public int addReadpeaForShareUser(Integer shareId,Integer readPeas) {
+    public int addReadpeaForShareUser(Integer shareId, Integer readPeas) {
         User user = new User();
         user.setUserId(shareId);
         user.setReadPeas(readPeas);
         return userDao.addReadPeas(user);
     }
+
     //阅读成功,给与奖励,更新数据等
     @Transactional(rollbackFor = Exception.class)
-    public int readSuccess(String userId, String articleId){
+    public int readSuccess(String userId, String articleId) {
         ReadArticle readArticle = new ReadArticle();
         readArticle.setArticleId(Integer.parseInt(articleId));
         readArticle.setReaderId(Integer.parseInt(userId));
-        //插入阅读文章表
-        ReadArticleDao.insertSelective(readArticle);
+        /*插入阅读文章表*/
+        //先查询
+        if (ReadArticleDao.selectCount(readArticle) == 1) {
+            //更新
+            ReadArticleDao.updateReadTime(readArticle);
+        } else {
+            //插入
+            ReadArticleDao.insertSelective(readArticle);
+        }
         //查询文章作者
         UserArticle userArticle = new UserArticle();
         userArticle.setArticleId(Integer.parseInt(articleId));
@@ -265,10 +273,10 @@ public class PublicNoService {
         ReadMe readMe = new ReadMe();
         readMe.setAuthorId(authorId);
         readMe.setReaderId(Integer.parseInt(userId));
-        if (readMeDao.selectCount(readMe)==1){
+        if (readMeDao.selectCount(readMe) == 1) {
             //更新
             readMeDao.updateReadTime(readMe);
-        }else {
+        } else {
             //插入
             readMeDao.insertSelective(readMe);
         }

@@ -19,4 +19,6 @@ public class ReadArticle {
     private Integer articleId;
     @Column(name = "read_time")
     private String readTime;
+    @Column(name = "read_count")
+    private String readCount;
 }
