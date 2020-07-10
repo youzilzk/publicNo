@@ -228,7 +228,7 @@ public class PublicNoController {
     @RequestMapping("/share")
     public void share(@Param("userId") String userId, HttpServletResponse response) throws Exception{
         try {
-            BufferedImage qrcodeImage = QRCodeUtil.encode("http://123.56.134.30:8000/api/visitor?shareId=" + userId, "img/logo.jpg", true);
+            BufferedImage qrcodeImage = QRCodeUtil.encode("http://huyue.group/api/visitor?shareId=" + userId, "img/logo.jpg", true);
             InputStream inputStream = ImgUtil.load(qrcodeImage, "img/background.jpg");
             ServletOutputStream outputStream = response.getOutputStream();
             byte[] bytes=new byte[1024];
@@ -255,7 +255,7 @@ public class PublicNoController {
         //设置cookie为一周
         cookie.setMaxAge(7*24*60*60);
         response.addCookie(cookie);
-        response.sendRedirect("http://123.56.134.30/#/");
+        response.sendRedirect("http://huyue.group/#/");
     }
 
     @RequestMapping("/readSuccess")
