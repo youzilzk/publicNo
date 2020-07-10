@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +31,7 @@ public class PublicNoController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
+    /**>>>>>>>>>>>>>>>用户信息>>>>>>>>>>>>>>>**/
     @RequestMapping(value = "/userInfo")
     public Response userInfo(@RequestParam(value = "userId") Integer userId, HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
@@ -52,6 +54,94 @@ public class PublicNoController {
         }
     }
 
+    @RequestMapping("/login")
+    public Response loginPage(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "openid") String openid) {
+        Cookie[] cookies = request.getCookies();
+        String shareId = "";
+        //尝试获取shareId
+        if (cookies != null) {
+            for (int i = 0; i < cookies.length; i++) {
+                if (cookies[i].getName().equals("shareId")) {
+                    shareId = cookies[i].getValue();
+                    break;
+                }
+            }
+        }
+        //如果用户来自他人分享,则对分享用户增加阅豆奖励
+        if (!shareId.equals("")) {
+            publicNoService.addReadpeaForShareUser(Integer.valueOf(shareId), 5);
+        }
+        try {
+            int loginType = 2;
+            User user = publicNoService.getUser(openid);
+            if (user == null) {
+                loginType = 1;
+                //这是新用户,立即注册
+                publicNoService.addUser(openid);
+                user = publicNoService.getUser(openid);
+            }
+            String userId = user.getUserId().toString();
+            Cookie uid = new Cookie("uid", userId);
+            Cookie token = new Cookie("token", passwordEncoder.encode(new String(openid + userId)));//token=openid+userId
+            response.addCookie(uid);
+            response.addCookie(token);
+            //存session
+            request.getSession().setAttribute(userId, openid);
+            return new LoginResponse(true, "登录成功!", Integer.parseInt(userId), loginType);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Response(false, "系统异常!");
+
+        }
+    }
+
+    @RequestMapping("/competeUserInfo")
+    public Response competeUserInfo(@RequestBody User user) {
+        try {
+            publicNoService.competeUser(user);
+            return new Response(true, "完善用户信息成功!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Response(false, "系统异常!");
+        }
+    }
+
+    @RequestMapping("/share")
+    public void share(@Param("userId") String userId, HttpServletResponse response) throws Exception {
+        try {
+            BufferedImage qrcodeImage = QRCodeUtil.encode("http://huyue.group/api/visitor?shareId=" + userId, "img/logo.jpg", true);
+            InputStream inputStream = ImgUtil.load(qrcodeImage, "img/background.jpg");
+            ServletOutputStream outputStream = response.getOutputStream();
+            byte[] bytes = new byte[1024];
+            while (inputStream.read(bytes) != -1) {
+                outputStream.write(bytes, 0, bytes.length);
+                outputStream.flush();
+            }
+            outputStream.close();
+            inputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setContentType("application/json;charset=utf-8");
+            PrintWriter writer = response.getWriter();
+            String json = JSON.toJSONString(new Response(false, "系统错误,请检查请求参数!"));
+            writer.write(json);
+            writer.flush();
+            writer.close();
+        }
+    }
+
+    @RequestMapping("/visitor")
+    public void visitor(@Param("shareId") String shareId, HttpServletResponse response) throws Exception {
+        Cookie cookie = new Cookie("shareId", shareId);
+        //设置cookie为一周
+        cookie.setMaxAge(7 * 24 * 60 * 60);
+        response.addCookie(cookie);
+        response.sendRedirect("http://huyue.group/#/");
+    }
+
+    /**<<<<<<<<<<<<<<<用户信息<<<<<<<<<<<<<<<**/
+
+    /**>>>>>>>>>>>>>>>文章操作>>>>>>>>>>>>>>>**/
     @RequestMapping(value = "/initPage")
     public Response initPage() {
         return publicNoService.initService();
@@ -71,10 +161,10 @@ public class PublicNoController {
         }
         if (userId_cookie.equals("") || !userId_cookie.equals(userId.toString())) {
             String isSelf = "0";
-            return publicNoService.getArticles(userId, isSelf,userId_cookie);
+            return publicNoService.getArticles(userId, isSelf, userId_cookie);
         } else {
             String isSelf = "1";
-            return publicNoService.getArticles(userId, isSelf,userId_cookie);
+            return publicNoService.getArticles(userId, isSelf, userId_cookie);
         }
     }
 
@@ -172,104 +262,20 @@ public class PublicNoController {
         }
     }
 
-
-    @RequestMapping("/login")
-    public Response loginPage(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "openid") String openid) {
-        Cookie[] cookies = request.getCookies();
-        String shareId = "";
-        //尝试获取shareId
-        if (cookies != null) {
-            for (int i = 0; i < cookies.length; i++) {
-                if (cookies[i].getName().equals("shareId")) {
-                    shareId = cookies[i].getValue();
-                    break;
-                }
-            }
-        }
-        //如果用户来自他人分享,则对分享用户增加阅豆奖励
-        if(!shareId.equals("")){
-            publicNoService.addReadpeaForShareUser(Integer.valueOf(shareId),5);
-        }
-        try {
-            int loginType = 2;
-            User user = publicNoService.getUser(openid);
-            if (user == null) {
-                loginType = 1;
-                //这是新用户,立即注册
-                publicNoService.addUser(openid);
-                user = publicNoService.getUser(openid);
-            }
-            String userId = user.getUserId().toString();
-            Cookie uid = new Cookie("uid", userId);
-            Cookie token = new Cookie("token", passwordEncoder.encode(new String(openid + userId)));//token=openid+userId
-            response.addCookie(uid);
-            response.addCookie(token);
-            //存session
-            request.getSession().setAttribute(userId, openid);
-            return new LoginResponse(true, "登录成功!", Integer.parseInt(userId), loginType);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new Response(false, "系统异常!");
-
-        }
-    }
-
-    @RequestMapping("/competeUserInfo")
-    public Response competeUserInfo(@RequestBody User user) {
-        try {
-            publicNoService.competeUser(user);
-            return new Response(true, "完善用户信息成功!");
-        } catch (Exception e) {
-            e.printStackTrace();
-            return new Response(false, "系统异常!");
-        }
-    }
-
-    @RequestMapping("/share")
-    public void share(@Param("userId") String userId, HttpServletResponse response) throws Exception{
-        try {
-            BufferedImage qrcodeImage = QRCodeUtil.encode("http://huyue.group/api/visitor?shareId=" + userId, "img/logo.jpg", true);
-            InputStream inputStream = ImgUtil.load(qrcodeImage, "img/background.jpg");
-            ServletOutputStream outputStream = response.getOutputStream();
-            byte[] bytes=new byte[1024];
-            while (inputStream.read(bytes)!=-1){
-                outputStream.write(bytes,0,bytes.length);
-                outputStream.flush();
-            }
-            outputStream.close();
-            inputStream.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-            response.setContentType("application/json;charset=utf-8");
-            PrintWriter writer = response.getWriter();
-            String json = JSON.toJSONString(new Response(false, "系统错误,请检查请求参数!"));
-            writer.write(json);
-            writer.flush();
-            writer.close();
-        }
-    }
-
-    @RequestMapping("/visitor")
-    public void visitor(@Param("shareId") String shareId, HttpServletResponse response) throws Exception{
-        Cookie cookie = new Cookie("shareId", shareId);
-        //设置cookie为一周
-        cookie.setMaxAge(7*24*60*60);
-        response.addCookie(cookie);
-        response.sendRedirect("http://huyue.group/#/");
-    }
-
     @RequestMapping("/readSuccess")
-    public Response readSuccess(@Param("userId") String userId,@Param("articleId") String articleId) {
+    public Response readSuccess(@Param("userId") String userId, @Param("articleId") String articleId) {
         try {
             int i = publicNoService.readSuccess(userId, articleId);
-            if(i==1){
-                return new Response(true,"更新数据成功!");
-            }else {
-                return new Response(false,"更新数据失败!");
+            if (i == 1) {
+                return new Response(true, "更新数据成功!");
+            } else {
+                return new Response(false, "更新数据失败!");
             }
-        }catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
-            return new Response(false,"更新数据失败,系统错误!");
+            return new Response(false, "更新数据失败,系统错误!");
         }
     }
+
+    /**<<<<<<<<<<<<<<<文章操作<<<<<<<<<<<<<<<**/
 }
