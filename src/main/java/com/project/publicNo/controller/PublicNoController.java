@@ -96,8 +96,9 @@ public class PublicNoController {
     }
 
     @RequestMapping("/competeUserInfo")
-    public Response competeUserInfo(@RequestBody User user) {
+    public Response competeUserInfo(@RequestParam Integer userId,@RequestParam String nickname,@RequestParam String picUrl,@RequestParam String phone) {
         try {
+            User user = new User(userId, nickname, picUrl, phone);
             publicNoService.competeUser(user);
             return new Response(true, "完善用户信息成功!");
         } catch (Exception e) {
