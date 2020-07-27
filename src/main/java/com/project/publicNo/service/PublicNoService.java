@@ -106,6 +106,14 @@ public class PublicNoService {
         }
     }
 
+    //获取用户头像地址
+    public String getPicUrl(Integer userId){
+        User user = new User();
+        user.setUserId(userId);
+        User selectOne = userDao.selectOne(user);
+        return selectOne.getPicUrl();
+    }
+
     //添加文章信息
     @Transactional(rollbackFor = Exception.class)
     public int addArticle(Map<String, String> map) {

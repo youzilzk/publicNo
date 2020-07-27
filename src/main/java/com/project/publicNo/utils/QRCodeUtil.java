@@ -12,6 +12,7 @@ import java.awt.*;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.URL;
@@ -66,20 +67,28 @@ public class QRCodeUtil {
         try {
             ClassPathResource classPathResource = new ClassPathResource(imgAddr);
             InputStream inputStream = classPathResource.getInputStream();
-            return ImageIO.read(inputStream);
+            if(inputStream==null){
+                return null;
+            }else {
+                return ImageIO.read(inputStream);
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
     }
 
-    private static void insertImage(BufferedImage source, String insertImgPath, boolean needCompress) throws Exception {
+    private static void insertImage(BufferedImage source, String insertImgPath, boolean needCompress) throws IOException {
         Image src = null;
         Image imageFromLocal = getImageFromLocal(insertImgPath);
         if (imageFromLocal != null) {
             src = imageFromLocal;
         } else {
-            return;
+            URL imageFromUrl = getImageFromUrl(insertImgPath);
+            if(imageFromUrl==null){
+                return;
+            }
+            src = ImageIO.read(imageFromUrl);
         }
         int width = src.getWidth(null);
         int height = src.getHeight(null);
