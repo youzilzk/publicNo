@@ -110,6 +110,7 @@ public class PublicNoController {
     @RequestMapping("/share")
     public void share(@Param("userId") Integer userId, HttpServletResponse response) throws Exception {
         try {
+            response.setHeader("Content-Type","image/jpg");
             String insertImgPath=publicNoService.getPicUrl(userId);
             System.out.println(insertImgPath);
             BufferedImage qrcodeImage = QRCodeUtil.encode("http://huyue.group:8000/api/visitor?shareId=" + userId, insertImgPath, true);
