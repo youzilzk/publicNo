@@ -67,20 +67,19 @@ public class PublicNoController {
     //获取授权数据
     @RequestMapping("/grantData")
     public Object grantData(@RequestParam String code) {
-        MediaType type = MediaType.parseMediaType("application/json;charset=UTF-8");
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(type);
         RestTemplate restTemplate = new RestTemplate();
+        //解决中文乱码
         restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
+        //获取access_token
         String access_token_url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx317cf7687db0f67f&secret=00d859baa981685f6c7a44082bf0031e&code=" + code + "&grant_type=authorization_code";
         ResponseEntity<String> responseEntity = restTemplate.exchange(access_token_url, HttpMethod.GET, null, String.class);
         JSONObject json = JSON.parseObject(responseEntity.getBody());
         String openid = (String) json.get("openid");
         String access_token = (String) json.get("access_token");
+        //获取微信用户信息
         String wx_user_info_url = "https://api.weixin.qq.com/sns/userinfo?access_token=" + access_token + "&openid=" + openid;
         System.out.println(wx_user_info_url);
         ResponseEntity<String> exchange = restTemplate.exchange(wx_user_info_url, HttpMethod.GET, null, String.class);
-        System.out.println(exchange.getBody());
         return JSON.parseObject(exchange.getBody());
     }
 
@@ -99,6 +98,10 @@ public class PublicNoController {
         }
         //如果用户来自他人分享,则对分享用户增加阅豆奖励
         if (!shareId.equals("")) {
+            //销毁该cookie
+            Cookie cookie = new Cookie("shareId", "");
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
             publicNoService.addReadpeaForShareUser(Integer.valueOf(shareId), 5);
         }
         try {
@@ -140,7 +143,7 @@ public class PublicNoController {
     @RequestMapping("/share")
     public void share(@Param("userId") Integer userId, HttpServletResponse response) throws Exception {
         try {
-            response.setHeader("Content-Type", "image/jpeg");
+            response.setHeader("Content-Type", "image/jpg");
             String insertImgPath = publicNoService.getPicUrl(userId);
             System.out.println(insertImgPath);
             BufferedImage qrcodeImage = QRCodeUtil.encode("http://huyue.group:8000/api/visitor?shareId=" + userId, insertImgPath, true);
