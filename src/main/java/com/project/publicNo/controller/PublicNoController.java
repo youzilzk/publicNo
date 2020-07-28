@@ -10,8 +10,11 @@ import com.project.publicNo.utils.ImgUtil;
 import com.project.publicNo.utils.QRCodeUtil;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -23,6 +26,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 
 
@@ -35,7 +39,9 @@ public class PublicNoController {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
-    /**>>>>>>>>>>>>>>>用户信息>>>>>>>>>>>>>>>**/
+    /**
+     * >>>>>>>>>>>>>>>用户信息>>>>>>>>>>>>>>>
+     **/
     @RequestMapping(value = "/userInfo")
     public Response userInfo(@RequestParam(value = "userId") Integer userId, HttpServletRequest request) {
         Cookie[] cookies = request.getCookies();
@@ -60,16 +66,21 @@ public class PublicNoController {
 
     //获取授权数据
     @RequestMapping("/grantData")
-    public Object grantData(@RequestParam String code){
+    public Object grantData(@RequestParam String code) {
+        MediaType type = MediaType.parseMediaType("application/json;charset=UTF-8");
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(type);
         RestTemplate restTemplate = new RestTemplate();
-        String access_token_url="https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx317cf7687db0f67f&secret=00d859baa981685f6c7a44082bf0031e&code="+code+"&grant_type=authorization_code";
+        restTemplate.getMessageConverters().add(0, new StringHttpMessageConverter(Charset.forName("UTF-8")));
+        String access_token_url = "https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx317cf7687db0f67f&secret=00d859baa981685f6c7a44082bf0031e&code=" + code + "&grant_type=authorization_code";
         ResponseEntity<String> responseEntity = restTemplate.exchange(access_token_url, HttpMethod.GET, null, String.class);
         JSONObject json = JSON.parseObject(responseEntity.getBody());
         String openid = (String) json.get("openid");
         String access_token = (String) json.get("access_token");
-        String wx_user_info_url="https://api.weixin.qq.com/sns/userinfo?access_token="+access_token+"&openid="+openid;
+        String wx_user_info_url = "https://api.weixin.qq.com/sns/userinfo?access_token=" + access_token + "&openid=" + openid;
         System.out.println(wx_user_info_url);
         ResponseEntity<String> exchange = restTemplate.exchange(wx_user_info_url, HttpMethod.GET, null, String.class);
+        System.out.println(exchange.getBody());
         return JSON.parseObject(exchange.getBody());
     }
 
@@ -115,7 +126,7 @@ public class PublicNoController {
     }
 
     @RequestMapping("/competeUserInfo")
-    public Response competeUserInfo(@RequestParam Integer userId,@RequestParam String nickname,@RequestParam String picUrl,@RequestParam String phone) {
+    public Response competeUserInfo(@RequestParam Integer userId, @RequestParam String nickname, @RequestParam String picUrl, @RequestParam String phone) {
         try {
             User user = new User(userId, nickname, picUrl, phone);
             publicNoService.competeUser(user);
@@ -129,8 +140,8 @@ public class PublicNoController {
     @RequestMapping("/share")
     public void share(@Param("userId") Integer userId, HttpServletResponse response) throws Exception {
         try {
-            response.setHeader("Content-Type","image/jpeg");
-            String insertImgPath=publicNoService.getPicUrl(userId);
+            response.setHeader("Content-Type", "image/jpeg");
+            String insertImgPath = publicNoService.getPicUrl(userId);
             System.out.println(insertImgPath);
             BufferedImage qrcodeImage = QRCodeUtil.encode("http://huyue.group:8000/api/visitor?shareId=" + userId, insertImgPath, true);
             InputStream inputStream = ImgUtil.load(qrcodeImage, "img/background.jpg");
@@ -164,7 +175,9 @@ public class PublicNoController {
 
     /**<<<<<<<<<<<<<<<用户信息<<<<<<<<<<<<<<<**/
 
-    /**>>>>>>>>>>>>>>>文章操作>>>>>>>>>>>>>>>**/
+    /**
+     * >>>>>>>>>>>>>>>文章操作>>>>>>>>>>>>>>>
+     **/
     @RequestMapping(value = "/initPage")
     public Response initPage() {
         return publicNoService.initService();
