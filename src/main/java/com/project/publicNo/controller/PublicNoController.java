@@ -61,9 +61,9 @@ public class PublicNoController {
     @RequestMapping("/grantData")
     public Object grantData(@RequestParam String code){
         RestTemplate restTemplate = new RestTemplate();
-        String url="https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx317cf7687db0f67f&secret=00d859baa981685f6c7a44082bf0031e&code="+code+"&grant_type=authorization_code";
+        String url="https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx581402c619bca464&secret=d0cc6cb0aa85afdac2597c9a8af7680e&code="+code+"&grant_type=authorization_code";
         ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
-        Object json = JSON.toJSON(responseEntity);
+        Object json = JSON.toJSON(responseEntity.getBody());
         return json;
     }
 
