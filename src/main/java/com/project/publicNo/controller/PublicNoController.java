@@ -1,6 +1,7 @@
 package com.project.publicNo.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.project.publicNo.entity.User;
 import com.project.publicNo.pojo.*;
 import com.project.publicNo.pojo.impl.LoginResponse;
@@ -61,10 +62,15 @@ public class PublicNoController {
     @RequestMapping("/grantData")
     public Object grantData(@RequestParam String code){
         RestTemplate restTemplate = new RestTemplate();
-        String url="https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx317cf7687db0f67f&secret=00d859baa981685f6c7a44082bf0031e&code="+code+"&grant_type=authorization_code";
-        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
-        Object json = JSON.toJSON(responseEntity.getBody());
-        return json;
+        String access_token_url="https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx317cf7687db0f67f&secret=00d859baa981685f6c7a44082bf0031e&code="+code+"&grant_type=authorization_code";
+        ResponseEntity<String> responseEntity = restTemplate.exchange(access_token_url, HttpMethod.GET, null, String.class);
+        JSONObject json = JSON.parseObject(responseEntity.getBody());
+        String openid = (String) json.get("openid");
+        String access_token = (String) json.get("access_token");
+        String wx_user_info_url="https://api.weixin.qq.com/sns/userinfo?access_token="+access_token+"&openid="+openid;
+        System.out.println(wx_user_info_url);
+        ResponseEntity<String> exchange = restTemplate.exchange(wx_user_info_url, HttpMethod.GET, null, String.class);
+        return JSON.parseObject(exchange.getBody());
     }
 
     @RequestMapping("/login")
