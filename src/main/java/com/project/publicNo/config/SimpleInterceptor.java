@@ -48,7 +48,7 @@ public class SimpleInterceptor implements HandlerInterceptor {
                 if (!userId.equals(param_userId)) {
                     response.setContentType("application/json;charset=utf-8");
                     PrintWriter writer = response.getWriter();
-                    String json = JSON.toJSONString(new Response(false, "请务操作他人文章!"+param_userId));
+                    String json = JSON.toJSONString(new Response(false, "请务操作他人文章!"));
                     writer.write(json);
                     writer.flush();
                     writer.close();
