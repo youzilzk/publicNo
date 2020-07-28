@@ -9,9 +9,12 @@ import com.project.publicNo.utils.ImgUtil;
 import com.project.publicNo.utils.QRCodeUtil;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.Cookie;
@@ -52,6 +55,16 @@ public class PublicNoController {
             Response response = publicNoService.loginService(userId, isSelf);
             return response;
         }
+    }
+
+    //获取授权数据
+    @RequestMapping("/grantData")
+    public Object grantData(@RequestParam String code){
+        RestTemplate restTemplate = new RestTemplate();
+        String url="https://api.weixin.qq.com/sns/oauth2/access_token?appid=wx317cf7687db0f67f&secret=00d859baa981685f6c7a44082bf0031e&code="+code+"&grant_type=authorization_code";
+        ResponseEntity<String> responseEntity = restTemplate.exchange(url, HttpMethod.GET, null, String.class);
+        Object json = JSON.toJSON(responseEntity);
+        return json;
     }
 
     @RequestMapping("/login")
@@ -110,7 +123,7 @@ public class PublicNoController {
     @RequestMapping("/share")
     public void share(@Param("userId") Integer userId, HttpServletResponse response) throws Exception {
         try {
-            response.setHeader("Content-Type","image/jpg");
+            response.setHeader("Content-Type","image/jpeg");
             String insertImgPath=publicNoService.getPicUrl(userId);
             System.out.println(insertImgPath);
             BufferedImage qrcodeImage = QRCodeUtil.encode("http://huyue.group:8000/api/visitor?shareId=" + userId, insertImgPath, true);
