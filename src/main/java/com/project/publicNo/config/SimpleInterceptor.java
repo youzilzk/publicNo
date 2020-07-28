@@ -44,10 +44,11 @@ public class SimpleInterceptor implements HandlerInterceptor {
                     return false;
                 }
                 //检查是否为本人
-                if (!userId.equals(request.getParameter("userId"))) {
+                String param_userId = request.getParameter("userId");
+                if (!userId.equals(param_userId)) {
                     response.setContentType("application/json;charset=utf-8");
                     PrintWriter writer = response.getWriter();
-                    String json = JSON.toJSONString(new Response(false, "请务操作他人文章!"));
+                    String json = JSON.toJSONString(new Response(false, "请务操作他人文章!"+param_userId));
                     writer.write(json);
                     writer.flush();
                     writer.close();
