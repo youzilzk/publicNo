@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.project.publicNo.entity.User;
 import com.project.publicNo.pojo.*;
+import com.project.publicNo.pojo.impl.AddArticleResponse;
 import com.project.publicNo.pojo.impl.LoginResponse;
 import com.project.publicNo.service.PublicNoService;
 import com.project.publicNo.utils.ImgUtil;
@@ -216,11 +217,12 @@ public class PublicNoController {
             map.put("title", title);
             map.put("articleLink", articleLink);
             map.put("isTop", isTop);
-            int i = publicNoService.addArticle(map);
-            if (i == 0) {
+            int articleId = publicNoService.addArticle(map);
+            //articleId为0表示阅豆不足
+            if (articleId == 0) {
                 return new Response(false, "阅豆不足!");
             }
-            return new Response(true, "发布文章成功!");
+            return new AddArticleResponse(true, "发布文章成功!",articleId);
         } catch (Exception e) {
             e.printStackTrace();
             return new Response(false, "发布文章失败!");

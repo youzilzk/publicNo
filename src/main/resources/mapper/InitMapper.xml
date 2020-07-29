@@ -18,7 +18,21 @@
                 where ta.delete_flg=0 and article_status=1 and tua.user_id=#{userId}
             </when>
         </choose>
+    </select>
 
+    <!--查询用户的文章-->
+    <select id="selectExposure" parameterType="Integer" resultType="Integer">
+      SELECT SUM(ta.`exposure`) AS exposure
+        FROM
+              t_user_article tua LEFT JOIN t_article ta
+        ON
+              tua.`article_id`=ta.`article_id`
+        WHERE
+              tua.`user_id`=#{userId}
+        AND
+              ta.`delete_flg`=0
+        AND
+              ta.`article_status`=1
     </select>
 
     <!--查询所有参与排行的用户id-->
@@ -33,7 +47,8 @@
 
     <!--查询所有排行文章-->
     <resultMap id="rankData" type="RankData">
-        <id property="publisher" column="nickname"/>
+        <id property="articleId" column="article_id"/>
+        <result column="nickname" property="publisher"/>
         <result column="pic_url" property="userPic"/>
         <result column="title" property="articleTitle"/>
         <result column="exposure" property="exposure"/>
@@ -41,7 +56,7 @@
         <result column="isTop" property="isTop"/>
     </resultMap>
     <select id="selectRankData" resultMap="rankData">
-     SELECT ta.title AS title,ta.article_link AS article_link, tu.pic_url AS pic_url,tu.`nickname` AS nickname, ta.`exposure` AS exposure,ta.`isTop`
+ SELECT ta.article_id AS article_id,ta.title AS title,ta.article_link AS article_link, tu.pic_url AS pic_url,tu.`nickname` AS nickname, ta.`exposure` AS exposure,ta.`isTop` AS isTop
         FROM t_article ta
         LEFT JOIN t_user_article tua ON ta.article_id=tua.article_id
         LEFT JOIN t_user tu ON tu.`user_id`=tua.`user_id`

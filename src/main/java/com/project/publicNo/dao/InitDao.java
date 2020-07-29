@@ -12,4 +12,5 @@ public interface InitDao {
     public int selectWaitReadCount(int userId);
     public ArrayList<RankData> selectRankData();
     public ArrayList<Integer> selectAllRankUser();
+    public int selectExposure(int userId);
 }

@@ -6,6 +6,7 @@ import lombok.ToString;
 @Data
 @ToString
 public class RankData {
+    private Integer articleId;//文章id
     private String publisher;//发布人
     private String userPic;//用户头像链接
     private String articleTitle;//文章标题

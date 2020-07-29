@@ -18,4 +18,5 @@ public class UserInfoResponse extends Response {
     private String registerTime;
     private Integer articleCount;
     private Integer waitReadCount;
+    private Integer exposure;
 }

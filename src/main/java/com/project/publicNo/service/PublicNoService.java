@@ -44,10 +44,13 @@ public class PublicNoService {
             int articleCount = initDao.selectArticleCount(userId, Integer.parseInt(isSelf));
             //查询待阅数
             int waitReadCount = initDao.selectWaitReadCount(userId);
+            //查询用户曝光度,用户所有文章曝光度之和
+            int exposure=initDao.selectExposure(userId);
+
             UserInfoResponse userInfoResponse = new UserInfoResponse(
                     userId, selectOne.getNickname(), selectOne.getOpenid(),
                     selectOne.getPicUrl(), selectOne.getReadPeas(), selectOne.getPhone(),
-                    selectOne.getRegisterTime(), articleCount, waitReadCount);
+                    selectOne.getRegisterTime(), articleCount, waitReadCount,exposure);
             userInfoResponse.setResult(true);
             userInfoResponse.setReaponseMessage("获取用户信息成功!");
             return userInfoResponse;
@@ -151,7 +154,8 @@ public class PublicNoService {
             user.setReadPeas(readPeas);
             userDao.subReadPeas(user);
         }
-        return 1;
+        //返回文章id
+        return  article.getArticleId();
     }
 
     //查询阅我用户信息
