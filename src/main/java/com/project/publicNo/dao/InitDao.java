@@ -7,10 +7,10 @@ import java.util.ArrayList;
 
 @Mapper
 public interface InitDao {
-    public int selectReadPeas(int userId);
-    public int selectArticleCount(@Param("userId")int userId, @Param("isSelf")int isSelf);
-    public int selectWaitReadCount(int userId);
+    public Integer selectReadPeas(int userId);
+    public Integer selectArticleCount(@Param("userId")int userId, @Param("isSelf")int isSelf);
+    public Integer selectWaitReadCount(int userId);
     public ArrayList<RankData> selectRankData();
     public ArrayList<Integer> selectAllRankUser();
-    public int selectExposure(int userId);
+    public Integer selectExposure(int userId);
 }

@@ -10,7 +10,7 @@ public interface ArticleDao extends Mapper<Article>{
     //查询用户的文章
     public ArrayList<Article> selectArticlesByUserId(@Param("userId")int userId, @Param("isSelf")int isSelf);
     //添加文章
-    public int insertArticle(Article article);
+    public Integer insertArticle(Article article);
     public void updateExposure(Integer articleId);
     public Article selectArticle(Integer articleId);
 }

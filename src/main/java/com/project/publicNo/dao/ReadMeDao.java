@@ -12,5 +12,5 @@ public interface ReadMeDao extends Mapper<ReadMe>{
     public ArrayList<ReadMeData> getReadMeInfo(Integer userId);
     public ArrayList<ReadArticle> selectReadOtherInfoByMe(@Param("authorId")Integer authorId, @Param("readerId")Integer readerId);
     public int selectCount(ReadMe readMe);
-    public int updateReadTime(ReadMe readMe);
+    public Integer updateReadTime(ReadMe readMe);
 }

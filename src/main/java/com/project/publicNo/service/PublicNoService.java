@@ -46,8 +46,8 @@ public class PublicNoService {
             //查询待阅数
             int waitReadCount = initDao.selectWaitReadCount(userId);
             //查询用户曝光度,用户所有文章曝光度之和
-            int exposure=initDao.selectExposure(userId);
-
+            Integer exposure=initDao.selectExposure(userId);
+            exposure=exposure==null?0:exposure;
             UserInfoResponse userInfoResponse = new UserInfoResponse(
                     userId, selectOne.getNickname(), selectOne.getOpenid(),
                     selectOne.getPicUrl(), selectOne.getReadPeas(), selectOne.getPhone(),
