@@ -22,6 +22,22 @@
         ORDER BY isTop DESC, create_time DESC
     </select>
 
+    <resultMap id="article" type="Article">
+        <id property="articleId" column="article_id"/>
+        <result property="title" column="title"/>
+        <result property="articleLink" column="article_link"/>
+        <result property="createTime" column="create_time"/>
+        <result property="deleteFlg" column="delete_flg"/>
+        <result property="isTop" column="isTop"/>
+        <result property="articleStatus" column="article_status"/>
+        <result property="exposure" column="exposure"/>
+    </resultMap>
+    <select id="selectArticle" parameterType="Integer" resultMap="article">
+        SELECT *
+        FROM t_article
+        WHERE article_id=#{articleId}
+    </select>
+
     <!--插入文章-->
     <insert id="insertArticle" parameterType="Article">
         <selectKey resultType="Integer" keyProperty="articleId" order="AFTER">

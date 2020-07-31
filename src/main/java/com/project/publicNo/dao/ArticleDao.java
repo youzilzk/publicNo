@@ -12,4 +12,5 @@ public interface ArticleDao extends Mapper<Article>{
     //添加文章
     public int insertArticle(Article article);
     public void updateExposure(Integer articleId);
+    public Article selectArticle(Integer articleId);
 }

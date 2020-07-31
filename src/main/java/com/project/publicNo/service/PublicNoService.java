@@ -11,6 +11,7 @@ import com.project.publicNo.pojo.impl.UserInfoResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -186,7 +187,8 @@ public class PublicNoService {
     public int delArticle(int articleId) {
         Article article = new Article();
         article.setArticleId(articleId);
-        Article selectOne = articleDao.selectOne(article);
+
+        Article selectOne = articleDao.selectArticle(articleId);
         if (selectOne == null) {
             return 0;//表示文章不存在
         }
@@ -194,6 +196,8 @@ public class PublicNoService {
             return 2;//返回2表示,文章已经删除
         }
         article.setDeleteFlg(1);
+        //使用mybatis需要将阅读状态置空
+        article.setReadStatus(null);
         return articleDao.updateByPrimaryKeySelective(article);
     }
 
