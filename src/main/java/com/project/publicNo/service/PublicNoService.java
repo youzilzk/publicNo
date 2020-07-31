@@ -214,6 +214,7 @@ public class PublicNoService {
             return 2;//返回2表示,文章已经上架
         }
         article.setArticleStatus(1);
+        article.setReadStatus(null);
         return articleDao.updateByPrimaryKeySelective(article);
     }
 
@@ -230,6 +231,7 @@ public class PublicNoService {
             return 2;//返回2表示,文章已经下架
         }
         article.setArticleStatus(0);
+        article.setReadStatus(null);
         return articleDao.updateByPrimaryKeySelective(article);
     }
 
