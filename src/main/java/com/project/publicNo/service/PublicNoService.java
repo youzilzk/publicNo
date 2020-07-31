@@ -206,7 +206,7 @@ public class PublicNoService {
     public int reAddArticle(int articleId) {
         Article article = new Article();
         article.setArticleId(articleId);
-        Article selectOne = articleDao.selectOne(article);
+        Article selectOne = articleDao.selectArticle(articleId);
         if (selectOne.getArticleStatus() == null) {
             return 0;//表示文章不存在
         }
@@ -222,8 +222,7 @@ public class PublicNoService {
     public int removeArticle(int articleId) {
         Article article = new Article();
         article.setArticleId(articleId);
-        article.setReadStatus(null);
-        Article selectOne = articleDao.selectOne(article);
+        Article selectOne = articleDao.selectArticle(articleId);
         if (selectOne.getArticleStatus() == null) {
             return 0;//表示文章不存在
         }
