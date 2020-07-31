@@ -222,6 +222,7 @@ public class PublicNoService {
     public int removeArticle(int articleId) {
         Article article = new Article();
         article.setArticleId(articleId);
+        article.setReadStatus(null);
         Article selectOne = articleDao.selectOne(article);
         if (selectOne.getArticleStatus() == null) {
             return 0;//表示文章不存在
