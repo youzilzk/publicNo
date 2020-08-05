@@ -97,14 +97,7 @@ public class PublicNoController {
                 }
             }
         }
-        //如果用户来自他人分享,则对分享用户增加阅豆奖励
-        if (!shareId.equals("")) {
-            //销毁该cookie
-            Cookie cookie = new Cookie("shareId", "");
-            cookie.setMaxAge(0);
-            response.addCookie(cookie);
-            publicNoService.addReadpeaForShareUser(Integer.valueOf(shareId), 5);
-        }
+
         try {
             int loginType = 2;
             User user = publicNoService.getUser(openid);
@@ -121,6 +114,14 @@ public class PublicNoController {
             response.addCookie(token);
             //存session
             request.getSession().setAttribute(userId, openid);
+            //如果用户来自他人分享,且是新用户,则对分享用户增加阅豆奖励
+            if (!shareId.equals("")&&loginType==1) {
+                //销毁该cookie
+                Cookie cookie = new Cookie("shareId", "");
+                cookie.setMaxAge(0);
+                response.addCookie(cookie);
+                publicNoService.addReadpeaForShareUser(Integer.valueOf(shareId), 5);
+            }
             return new LoginResponse(true, "登录成功!", Integer.parseInt(userId), loginType);
         } catch (Exception e) {
             e.printStackTrace();
