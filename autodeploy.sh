@@ -12,4 +12,6 @@ ls -l &&
 mvn install &&
 echo -n 'current dictionary : '&& pwd echo ' as following:' &&
 ls -l &&
-cd ./target
+cd ./target &&
+echo -n 'current dictionary : '&& pwd echo ' as following:' &&
+ls -l
