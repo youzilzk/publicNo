@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
 cd /nurxat/publicNo &&
-ll &&
+ls -l &&
 mvn clean &&
-ls &&
+ls -l &&
 git pull &&
 mvn install
