@@ -86,7 +86,7 @@ public class PublicNoController {
 
     @RequestMapping("/login")
     public Response loginPage(HttpServletRequest request, HttpServletResponse response, @RequestParam(value = "openid") String openid) {
-        Cookie[] cookies = request.getCookies();
+     /*   Cookie[] cookies = request.getCookies();
         String shareId = "";
         //尝试获取shareId
         if (cookies != null) {
@@ -96,7 +96,7 @@ public class PublicNoController {
                     break;
                 }
             }
-        }
+        }*/
 
         try {
             int loginType = 2;
@@ -114,14 +114,14 @@ public class PublicNoController {
             response.addCookie(token);
             //存session
             request.getSession().setAttribute(userId, openid);
-            //如果用户来自他人分享,且是新用户,则对分享用户增加阅豆奖励
+        /*    //如果用户来自他人分享,且是新用户,则对分享用户增加阅豆奖励
             if (!shareId.equals("")&&loginType==1) {
                 //销毁该cookie
                 Cookie cookie = new Cookie("shareId", "");
                 cookie.setMaxAge(0);
                 response.addCookie(cookie);
                 publicNoService.addReadpeaForShareUser(Integer.valueOf(shareId), 5);
-            }
+            }*/
             return new LoginResponse(true, "登录成功!", Integer.parseInt(userId), loginType);
         } catch (Exception e) {
             e.printStackTrace();
@@ -148,7 +148,7 @@ public class PublicNoController {
             response.setHeader("Content-Type", "image/jpg");
             String insertImgPath = publicNoService.getPicUrl(userId);
             System.out.println(insertImgPath);
-            BufferedImage qrcodeImage = QRCodeUtil.encode("http://huyue.group:8000/api/visitor?shareId=" + userId, insertImgPath, true);
+            BufferedImage qrcodeImage = QRCodeUtil.encode("http://huyue.group/visitor?shareId=" + userId, insertImgPath, true);
             InputStream inputStream = ImgUtil.load(qrcodeImage, "img/background.jpg");
             ServletOutputStream outputStream = response.getOutputStream();
             byte[] bytes = new byte[1024];
@@ -171,11 +171,14 @@ public class PublicNoController {
 
     @RequestMapping("/visitor")
     public void visitor(@Param("shareId") String shareId, HttpServletResponse response) throws Exception {
-        Cookie cookie = new Cookie("shareId", shareId);
+        /*Cookie cookie = new Cookie("shareId", shareId);
         //设置cookie为一周
         cookie.setMaxAge(7 * 24 * 60 * 60);
         response.addCookie(cookie);
-        response.sendRedirect("http://huyue.group/#/");
+        response.sendRedirect("http://huyue.group/#/");*/
+        //奖励阅豆
+        publicNoService.addReadpeaForShareUser(Integer.valueOf(shareId), 5);
+
     }
 
     /**<<<<<<<<<<<<<<<用户信息<<<<<<<<<<<<<<<**/

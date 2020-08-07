@@ -21,7 +21,7 @@ public class SimpleInterceptor implements HandlerInterceptor {
         String path = request.getServletPath();
         response.setHeader("Access-Control-Allow-Origin", request.getHeader("Origin"));
         response.setHeader("Access-Control-Allow-Credentials", "true");
-        if (path.equals("/api/readSuccess") || path.equals("/api/completeUserInfo") || path.equals("/api/reAddArticle") || path.equals("/api/removeArticle") || path.equals("/api/delArticle") || path.equals("/api/addArticle")) {
+        if (path.equals("/api/visitor") || path.equals("/api/readSuccess") || path.equals("/api/completeUserInfo") || path.equals("/api/reAddArticle") || path.equals("/api/removeArticle") || path.equals("/api/delArticle") || path.equals("/api/addArticle")) {
             try {
                 Cookie[] cookies = request.getCookies();
                 //检查登录状态
