@@ -14,7 +14,7 @@ echo -n 'current dictionary : '&& pwd echo ' as following:' &&
 ls -l &&
 cd ./target &&
 echo -n 'current dictionary : '&& pwd echo ' as following:' &&
-ls -li
+ls -l
 a=$(netstat -tunlp|grep 8000|awk '{print $7}')
 string=$a
 #对IFS变量 进行替换处理
