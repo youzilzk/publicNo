@@ -42,7 +42,7 @@
 
     <!--查询待阅数-->
     <select id="selectWaitReadCount" parameterType="Integer" resultType="Integer">
-        SELECT count(*) FROM t_readme WHERE author_id=#{userId}
+        SELECT count(*) FROM t_readme WHERE author_id=#{userId} and reader_id!=#{userId}
     </select>
 
     <!--查询所有排行文章-->
