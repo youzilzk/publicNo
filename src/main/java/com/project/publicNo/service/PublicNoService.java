@@ -133,12 +133,13 @@ public class PublicNoService {
             } catch (Exception e) {
                 readPeas = 5;
             }
-            int i = userDao.selectReadPeasByUserId(userId);
-            if (i < readPeas) {
-                return 0;//阅豆不足,直接返回
-            }
-        }else {
 
+        }else {
+            readPeas=1;
+        }
+        int i = userDao.selectReadPeasByUserId(userId);
+        if (i < readPeas) {
+            return 0;//阅豆不足,直接返回
         }
         //插入文章表前初始化参数
         article.setTitle(map.get("title"));
@@ -151,12 +152,10 @@ public class PublicNoService {
         UserArticle userArticle = new UserArticle(userId, article.getArticleId());
         userArticleDao.insertSelective(userArticle);
         //更新阅豆
-        if (isTop == 1) {
-            User user = new User();
-            user.setUserId(userId);
-            user.setReadPeas(readPeas);
-            userDao.subReadPeas(user);
-        }
+        User user = new User();
+        user.setUserId(userId);
+        user.setReadPeas(readPeas);
+        userDao.subReadPeas(user);
         //返回文章id
         return  article.getArticleId();
     }
