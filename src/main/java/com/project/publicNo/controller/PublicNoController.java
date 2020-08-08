@@ -170,7 +170,7 @@ public class PublicNoController {
     }
 
     @RequestMapping("/visitor")
-    public void visitor(@Param("shareId") String shareId, HttpServletResponse response) throws Exception {
+    public Response visitor(@Param("shareId") String shareId, HttpServletResponse response) throws Exception {
         /*Cookie cookie = new Cookie("shareId", shareId);
         //设置cookie为一周
         cookie.setMaxAge(7 * 24 * 60 * 60);
@@ -178,7 +178,7 @@ public class PublicNoController {
         response.sendRedirect("http://huyue.group/#/");*/
         //奖励阅豆
         publicNoService.addReadpeaForShareUser(Integer.valueOf(shareId), 5);
-
+        return new Response(true,"奖励成功!");
     }
 
     /**<<<<<<<<<<<<<<<用户信息<<<<<<<<<<<<<<<**/
