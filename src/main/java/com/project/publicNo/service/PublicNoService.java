@@ -137,6 +137,8 @@ public class PublicNoService {
             if (i < readPeas) {
                 return 0;//阅豆不足,直接返回
             }
+        }else {
+
         }
         //插入文章表前初始化参数
         article.setTitle(map.get("title"));
