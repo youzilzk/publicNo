@@ -17,9 +17,9 @@ public class Feedback {
     private Integer userId;
     @Column(name = "phone")
     private String phone;
-    @Column(name = "feedback_type")
+    @Column(name = "fd_type")
     private Integer feedbackType;
-    @Column(name = "feedback_desc")
+    @Column(name = "fd_desc")
     private String feedbackDdesc;
 
     public Feedback(Integer userId, String phone, Integer feedbackType, String feedbackDdesc) {

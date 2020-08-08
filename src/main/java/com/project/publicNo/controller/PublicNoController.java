@@ -327,9 +327,9 @@ public class PublicNoController {
     /**<<<<<<<<<<<<<<<反馈建议<<<<<<<<<<<<<<<**/
 
     @RequestMapping("/feedback")
-    public Response feedback(@Param("userId") Integer userId, @Param("phone") String phone, @Param("feedbackType") Integer feedbackType, @Param("feedbackDdesc") String feedbackDdesc) {
+    public Response feedback(@Param("userId") Integer userId, @Param("phone") String phone, @Param("feedbackType") Integer feedbackType, @Param("feedbackDesc") String feedbackDesc) {
         try {
-            int feedback = publicNoService.feedback(userId, phone, feedbackType, feedbackDdesc);
+            int feedback = publicNoService.feedback(userId, phone, feedbackType, feedbackDesc);
             if(feedback==1){
                 publicNoService.addReadpeaForUser(userId,5);
                 return new Response(true, "反馈成功,奖励5个阅豆!");

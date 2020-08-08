@@ -312,6 +312,7 @@ public class PublicNoService {
     }
 
     //反馈建议
+    @Transactional(rollbackFor = Exception.class)
     public int feedback(Integer userId,String phone, Integer feedbackType,String feedbackDdesc){
         Feedback feedback = new Feedback(userId, phone, feedbackType, feedbackDdesc);
         int i = feedbackDao.insertSelective(feedback);
