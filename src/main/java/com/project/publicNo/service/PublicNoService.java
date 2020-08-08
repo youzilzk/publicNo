@@ -32,6 +32,8 @@ public class PublicNoService {
     private ReadMeDao readMeDao;
     @Autowired
     private ReadArticleDao ReadArticleDao;
+    @Autowired
+    private FeedbackDao feedbackDao;
 
     //获取登录的用户信息
     public Response loginService(int userId, String isSelf) {
@@ -261,7 +263,7 @@ public class PublicNoService {
         return userDao.updateByPrimaryKeySelective(user);
     }
 
-    public int addReadpeaForShareUser(Integer shareId, Integer readPeas) {
+    public int addReadpeaForUser(Integer shareId, Integer readPeas) {
         User user = new User();
         user.setUserId(shareId);
         user.setReadPeas(readPeas);
@@ -307,5 +309,12 @@ public class PublicNoService {
         user.setReadPeas(1);
         userDao.addReadPeas(user);
         return 1;
+    }
+
+    //反馈建议
+    public int feedback(Integer userId,String phone, Integer feedbackType,String feedbackDdesc){
+        Feedback feedback = new Feedback(userId, phone, feedbackType, feedbackDdesc);
+        int i = feedbackDao.insertSelective(feedback);
+        return i;
     }
 }

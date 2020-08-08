@@ -177,7 +177,7 @@ public class PublicNoController {
         response.addCookie(cookie);
         response.sendRedirect("http://huyue.group/#/");*/
         //奖励阅豆
-        publicNoService.addReadpeaForShareUser(Integer.valueOf(shareId), 5);
+        publicNoService.addReadpeaForUser(Integer.valueOf(shareId), 5);
         return new Response(true,"奖励成功!");
     }
 
@@ -323,4 +323,25 @@ public class PublicNoController {
     }
 
     /**<<<<<<<<<<<<<<<文章操作<<<<<<<<<<<<<<<**/
+
+    /**<<<<<<<<<<<<<<<反馈建议<<<<<<<<<<<<<<<**/
+
+    @RequestMapping("/feedback")
+    public Response feedback(@Param("userId") Integer userId, @Param("phone") String phone, @Param("feedbackType") Integer feedbackType, @Param("feedbackDdesc") String feedbackDdesc) {
+        try {
+            int feedback = publicNoService.feedback(userId, phone, feedbackType, feedbackDdesc);
+            if(feedback==1){
+                publicNoService.addReadpeaForUser(userId,5);
+                return new Response(true, "反馈成功,奖励5个阅豆!");
+            }else {
+                return new Response(false, "提交反馈时失败!");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new Response(false, "反馈失败,系统出了点小问题!");
+        }
+    }
+
+    /**<<<<<<<<<<<<<<<反馈建议<<<<<<<<<<<<<<<**/
 }
