@@ -148,7 +148,7 @@ public class PublicNoController {
             response.setHeader("Content-Type", "image/jpg");
             String insertImgPath = publicNoService.getPicUrl(userId);
             System.out.println(insertImgPath);
-            BufferedImage qrcodeImage = QRCodeUtil.encode("http://huyue.group/visitor?shareId=" + userId, insertImgPath, true);
+            BufferedImage qrcodeImage = QRCodeUtil.encode("http://huyue.group?shareId=" + userId, insertImgPath, true);
             InputStream inputStream = ImgUtil.load(qrcodeImage, "img/background.jpg");
             ServletOutputStream outputStream = response.getOutputStream();
             byte[] bytes = new byte[1024];
