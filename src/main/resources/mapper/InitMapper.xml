@@ -72,4 +72,8 @@
         ORDER BY ta.`create_time` DESC, tu.`read_peas` DESC
     </select>
 
+    <select id="selectArticleIdsAndReadedToday" resultType="Integer">
+        SELECT article_id FROM t_read_article WHERE reader_id=#{userId} AND TO_DAYS(read_time)=TO_DAYS(NOW())
+    </select>
+
 </mapper>

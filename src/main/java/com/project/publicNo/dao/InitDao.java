@@ -13,4 +13,5 @@ public interface InitDao {
     public ArrayList<RankData> selectRankData();
     public ArrayList<Integer> selectAllRankUser();
     public Integer selectExposure(int userId);
+    public ArrayList<Integer> selectArticleIdsAndReadedToday(int userId);
 }

@@ -15,6 +15,7 @@ import tk.mybatis.mapper.entity.Example;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 @Service
@@ -64,11 +65,28 @@ public class PublicNoService {
     }
 
     //初始化首页
-    public Response initService() {
+    public Response initService(String userId) {
         try {
             InitResponse initResponse = new InitResponse();
             //查询阅读排行
             ArrayList<RankData> rankList = initDao.selectRankData();
+            HashSet<Integer> set = new HashSet<>();
+            if(!userId.equals("")){
+                ArrayList<Integer> articleIds=initDao.selectArticleIdsAndReadedToday(Integer.parseInt(userId));
+                for (int i = 0; i < articleIds.size(); i++) {
+                    set.add(articleIds.get(i));
+                }
+            }
+            for (int i = 0; i < rankList.size(); i++) {
+                Integer articleId = rankList.get(i).getArticleId();
+                if(set.contains(articleId)){
+                    //设置为已阅
+                    rankList.get(i).setIsReaded(1);
+                }else {
+                    //设置为未阅
+                    rankList.get(i).setIsReaded(0);
+                }
+            }
             initResponse.setRankList(rankList);
             initResponse.setReaponseMessage("查询成功!");
             initResponse.setResult(true);

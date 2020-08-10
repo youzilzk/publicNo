@@ -187,8 +187,19 @@ public class PublicNoController {
      * >>>>>>>>>>>>>>>文章操作>>>>>>>>>>>>>>>
      **/
     @RequestMapping(value = "/initPage")
-    public Response initPage() {
-        return publicNoService.initService();
+    public Response initPage(HttpServletRequest request) {
+        Cookie[] cookies = request.getCookies();
+        String userId="";
+      if(cookies!=null){
+          for (int i = 0; i < cookies.length; i++) {
+              String name = cookies[i].getName();
+              if(name.equals("uid")){
+                  userId=cookies[i].getValue();
+                  break;
+              }
+          }
+      }
+        return publicNoService.initService(userId);
     }
 
     @RequestMapping("/articles")

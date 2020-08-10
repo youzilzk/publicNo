@@ -13,4 +13,5 @@ public class RankData {
     private String exposure;//曝光度
     private String articleUrl;//文章地址
     private int isTop;//是否置顶
+    private int isReaded;//是否已阅(当天)
 }
