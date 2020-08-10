@@ -342,8 +342,8 @@ public class PublicNoController {
         try {
             int feedback = publicNoService.feedback(userId, phone, feedbackType, feedbackDesc);
             if(feedback==1){
-                publicNoService.addReadpeaForUser(userId,5);
-                return new Response(true, "反馈成功,奖励5个阅豆!");
+                //publicNoService.addReadpeaForUser(userId,5);
+                return new Response(true, "反馈成功!");
             }else {
                 return new Response(false, "提交反馈时失败!");
             }
