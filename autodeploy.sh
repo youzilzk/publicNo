@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
 
 cd /nurxat/publicNo &&
-echo -en '\e[33mcurrent dictionary : '&& pwd && echo -en ' as following:\e[36m' &&
+echo -en '\e[33mcurrent dictionary : '&& pwd && echo -e ' as following:\e[36m' &&
 ls -l &&
 mvn clean &&
-echo -en '\e[33mcurrent dictionary : '&& pwd && echo -en ' as following:\e[36m' &&
+echo -en '\e[33mcurrent dictionary : '&& pwd && echo -e ' as following:\e[36m' &&
 ls -l &&
 git pull &&
-echo -en '\e[33mcurrent dictionary : '&& pwd && echo -en ' as following:\e[36m' &&
+echo -en '\e[33mcurrent dictionary : '&& pwd && echo -e ' as following:\e[36m' &&
 ls -l &&
 mvn install &&
-echo -en '\e[33mcurrent dictionary : '&& pwd && echo -en ' as following:\e[36m' &&
+echo -en '\e[33mcurrent dictionary : '&& pwd && echo -e ' as following:\e[36m' &&
 ls -l &&
 cd ./target &&
-echo -en '\e[33mcurrent dictionary : '&& pwd && echo -en ' as following:\e[36m' &&
+echo -en '\e[33mcurrent dictionary : '&& pwd && echo -e ' as following:\e[36m' &&
 ls -l
 a=$(netstat -tunlp|grep 8000|awk '{print $7}')
 string=$a
