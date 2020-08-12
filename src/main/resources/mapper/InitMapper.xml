@@ -69,7 +69,7 @@
         AND read_peas IS NOT NULL
         AND exposure IS NOT NULL
         AND ta.`isTop` IS NOT NULL
-        ORDER BY ta.`create_time` DESC, tu.`read_peas` DESC
+        ORDER BY ta.`isTop` DESC, ta.`create_time` DESC, tu.`read_peas` DESC
     </select>
 
     <select id="selectArticleIdsAndReadedToday" resultType="Integer">
