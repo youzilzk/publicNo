@@ -319,13 +319,16 @@ public class PublicNoService {
             //插入
             readMeDao.insertSelective(readMe);
         }
-        //更新文章曝光数
-        articleDao.updateExposure(Integer.parseInt(articleId));
-        //更新用户阅豆
-        User user = new User();
-        user.setUserId(Integer.parseInt(userId));
-        user.setReadPeas(1);
-        userDao.addReadPeas(user);
+        //阅读自己文章不奖励阅豆也不更新曝光度,否则增加
+       if(!userId.toString().equals(authorId)){
+           //更新文章曝光数
+           articleDao.updateExposure(Integer.parseInt(articleId));
+           //更新用户阅豆
+           User user = new User();
+           user.setUserId(Integer.parseInt(userId));
+           user.setReadPeas(1);
+           userDao.addReadPeas(user);
+       }
         return 1;
     }
 
