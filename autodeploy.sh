@@ -1,19 +1,19 @@
 #!/usr/bin/env bash
 
 cd /nurxat/publicNo &&
-echo -n 'current dictionary : '&& pwd echo ' as following:' &&
+echo -en '\e[33mcurrent dictionary : '&& pwd && echo -e ' as following:\e[36m' &&
 ls -l &&
 mvn clean &&
-echo -n 'current dictionary : '&& pwd echo ' as following:' &&
+echo -en '\e[33mcurrent dictionary : '&& pwd && echo -e ' as following:\e[36m' &&
 ls -l &&
 git pull &&
-echo -n 'current dictionary : '&& pwd echo ' as following:' &&
+echo -en '\e[33mcurrent dictionary : '&& pwd && echo -e ' as following:\e[36m' &&
 ls -l &&
 mvn install &&
-echo -n 'current dictionary : '&& pwd echo ' as following:' &&
+echo -en '\e[33mcurrent dictionary : '&& pwd && echo -e ' as following:\e[36m' &&
 ls -l &&
 cd ./target &&
-echo -n 'current dictionary : '&& pwd echo ' as following:' &&
+echo -en '\e[33mcurrent dictionary : '&& pwd && echo -e ' as following:\e[36m' &&
 ls -l
 a=$(netstat -tunlp|grep 8000|awk '{print $7}')
 string=$a
@@ -24,7 +24,7 @@ array=($string)
 IFS="$OLD_IFS"
 kill 9  ${array[0]}&&
 sleep 2
-echo -n 'current running process as following : '&&
+echo -e '\e[33mcurrent running process as following : \e[36m'&&
 ps -ef
-echo 'process is restarting ... '&&
+echo -e '\e[33mprocess is restarting ... \e[36m'&&
 nohup java -jar publicNo-1.0.jar
